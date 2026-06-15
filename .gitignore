@@ -28,6 +28,10 @@
 
 AGENTS.md
 ai-context.md
+CONTEXT.md
+DESIGN.md
+LANDING.md
+flow.md
 
 # debug
 npm-debug.log*

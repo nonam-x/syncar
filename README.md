@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Syncar
 
-## Getting Started
+An AI-powered email and calendar management app built using Next.js, Corsair, and Gemini/OpenAI.
 
-First, run the development server:
+## 🚀 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Syncar is a modern productivity tool that reimagines Gmail and Google Calendar with an AI-first approach. Instead of clicking through multiple screens, users can manage emails and meetings using a clean UI or natural language chat.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* 📩 Gmail integration (send, read, search emails)
+* 📅 Google Calendar integration (create & manage events)
+* 🤖 AI Chat assistant (natural language commands)
+* ⚡ Real-time updates using webhooks
+* 🔍 Smart email search and filtering
+* 🧠 AI-based email prioritization
+* ⌨️ Keyboard shortcuts (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧱 Tech Stack
 
-## Learn More
+* Next.js (App Router)
+* TypeScript
+* PostgreSQL + Prisma
+* Corsair SDK (Gmail + Calendar integration layer)
+* Gemini / OpenAI (AI agent)
+* Clerk (authentication)
+* Tailwind CSS + shadcn/ui
 
-To learn more about Next.js, take a look at the following resources:
+## 🧠 Core Idea
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Instead of building raw Gmail UI again, this app uses Corsair as an integration layer and AI as the control system:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+User → UI / Chat → AI (Gemini) → Corsair → Gmail / Calendar → Response
 
-## Deploy on Vercel
+## ⚙️ Setup (Basic)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Install dependencies
+2. Setup `.env` (Google, Corsair, DB, AI keys)
+3. Run Prisma migrations
+4. Start Next.js server
+5. Expose localhost using ngrok for webhooks
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📡 Webhooks
+
+Corsair sends real-time updates (new emails, calendar events) directly to backend endpoints using webhook URLs.
+
+## 🎯 Goal
+
+To build a flexible AI-first productivity inbox where users control email and calendar using natural language instead of clicks.
+
+---
+
+Builder Mode On | MacBook Giveaway Hackathon
+#chaicode #corsair-dev
