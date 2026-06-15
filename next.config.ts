@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Allow cross-origin requests from Clerk hosted pages
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
 };
 
 export default nextConfig;

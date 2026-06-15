@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next":true,
+    // "**/public":true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next":true,
+    // "**/public":true
+  }
+}
