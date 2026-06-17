@@ -32,21 +32,21 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/light-trans-logo.png",
+        url: "/light-them-logo.svg",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/dark-trans-logo.png",
+        url: "/dark-them-logo.svg",
         media: "(prefers-color-scheme: dark)",
       },
     ],
     apple: [
       {
-        url: "/light-trans-logo.png",
+        url: "/light-them-logo.svg",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/dark-trans-logo.png",
+        url: "/dark-them-logo.svg",
         media: "(prefers-color-scheme: dark)",
       },
     ],

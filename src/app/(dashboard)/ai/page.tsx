@@ -70,11 +70,12 @@ export default function AIPage() {
 
   // 3. Poll for pending messages
   useEffect(() => {
-    const pendingMsg = activeConv?.messages.find((m) => m.status === "pending");
-    if (!pendingMsg || !activeConv.serverConvId) return;
 
-    const conversationId = activeConv.serverConvId;
-    const messageId = pendingMsg.id;
+    const pendingMsg = activeConv?.messages.find(
+  (m) => m.status === "pending"
+);
+const conversationId = activeConv?.serverConvId;
+if (!pendingMsg || !conversationId) return;
 
     setIsLoading(true);
 
