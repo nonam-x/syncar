@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 
+Clone/
 # testing
 /coverage
 
@@ -26,14 +27,7 @@
 
 # md
 
-.md
-
-AGENTS.md
-ai-context.md
-CONTEXT.md
-DESIGN.md
-LANDING.md
-flow.md
+*.md
 
 # debug
 npm-debug.log*

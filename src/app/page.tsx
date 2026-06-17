@@ -8,10 +8,12 @@ import { useUser } from "@clerk/nextjs";
 import { useUIStore } from "@/lib/store/ui.store";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Zap, Bot, Calendar, Mail, Search, Command, ArrowRight,
-  CheckCircle2, Sparkles, Sun, Moon, Clock, Keyboard, Send,
-  Globe, Database, Play, ArrowRightLeft, X, Check, Sliders, RefreshCw, Menu
-} from "lucide-react";
+  BoltIcon, CpuChipIcon, CalendarIcon, EnvelopeIcon, MagnifyingGlassIcon,
+  CommandLineIcon, ArrowRightIcon, CheckCircleIcon, SparklesIcon, SunIcon,
+  MoonIcon, ClockIcon, PaperAirplaneIcon, GlobeAltIcon, ServerIcon,
+  ArrowsRightLeftIcon, XMarkIcon, CheckIcon, AdjustmentsHorizontalIcon,
+  ArrowPathIcon, Bars3Icon
+} from "@heroicons/react/24/outline";
 
 /* ============================================================================
    1. TYPES & DATA CONSTANTS (Hybrid-Elite-Dark Spec)
@@ -115,6 +117,51 @@ const ONBOARDING_STEPS = [
   { step: "03", title: "Local Cache Ingestion", desc: "Local PostgreSQL DB creates high-speed indices for vector and semantic search." }
 ];
 
+const EASE_EXPO = [0.16, 1, 0.3, 1] as [number, number, number, number];
+const EASE_OUT = [0.25, 1, 0.5, 1] as [number, number, number, number];
+
+const MotionLink = motion(Link);
+
+const arrowVariants = {
+  initial: { x: 0 },
+  hover: { x: 4, transition: { type: "spring" as const, stiffness: 400, damping: 25 } }
+};
+
+const heroContainerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08
+    }
+  }
+};
+
+const heroItemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.9,
+      ease: EASE_EXPO
+    }
+  }
+};
+
+const bentoContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const bentoItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_EXPO } }
+};
+
 /* ============================================================================
    2. MAIN EXPORT COMPONENT
    ============================================================================ */
@@ -190,11 +237,11 @@ export default function LandingPage() {
             exit={{ opacity: 0, y: 32, scale: 0.95 }}
             className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border border-hairline shadow-sm bg-surface-1"
           >
-            <Zap className="w-4 h-4 text-ink animate-pulse" />
+            <BoltIcon className="w-4 h-4 text-ink animate-pulse" />
             <div className="flex flex-col">
               <span className="text-xs font-semibold text-ink">{toast.message}</span>
               {toast.shortcut && (
-                <span className="text-xs text-ink-muted font-sans">
+                <span className="caption text-ink-muted">
                   Shortcut: <kbd className="bg-surface-3 px-1 py-0.5 rounded text-ink font-mono font-bold">{toast.shortcut}</kbd>
                 </span>
               )}
@@ -247,7 +294,7 @@ export default function LandingPage() {
 
 function SectionEyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-ink/5 text-ink-secondary border border-ink/10 mb-4 font-sans">
+    <span className="inline-flex items-center px-3 py-1 rounded-full bg-ink/5 text-ink-secondary border border-ink/10 mb-4 eyebrow">
       {children}
     </span>
   );
@@ -308,50 +355,60 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
                 )}
                 {isLoaded && !isSignedIn && (
                   <>
-                    <Link
+                    <MotionLink
                       href="/sign-in"
-                      className="text-sm font-medium px-3 py-1.5 rounded text-ink-secondary hover:text-ink transition-colors duration-200 whitespace-nowrap"
+                      whileHover={{ y: -1 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="text-sm font-medium px-3 py-1.5 rounded text-ink-secondary hover:text-ink transition-all duration-200 whitespace-nowrap"
                     >
                       Sign in
-                    </Link>
-                    <Link
+                    </MotionLink>
+                    <MotionLink
                       href="/sign-up"
+                      whileHover={{ scale: 1.02, y: -1 }}
+                      whileTap={{ scale: 0.98 }}
                       className="btn-lovable-primary px-3.5 py-2 text-sm font-medium rounded-md whitespace-nowrap"
                     >
                       Get started
-                    </Link>
+                    </MotionLink>
                   </>
                 )}
                 {isLoaded && isSignedIn && (
-                  <Link
+                  <MotionLink
                     href="/inbox"
+                    whileHover={{ scale: 1.02, y: -1 }}
+                    whileTap={{ scale: 0.98 }}
                     className="btn-lovable-primary px-3.5 py-2 text-sm font-medium rounded-md whitespace-nowrap"
                   >
                     Go to Workspace
-                  </Link>
+                  </MotionLink>
                 )}
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={toggleTheme}
-                className="p-2 rounded-md border border-hairline hover:bg-surface-1 hover:border-hairline-strong transition-all text-ink-secondary hover:text-ink"
+                className="p-2 rounded-md border border-hairline hover:bg-surface-1 hover:border-hairline-strong transition-all text-ink-secondary hover:text-ink flex items-center justify-center"
                 title="Toggle Theme"
               >
                 {mounted ? (
-                  theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />
+                  theme === "light" ? <MoonIcon className="w-4 h-4" /> : <SunIcon className="w-4 h-4" />
                 ) : (
                   <div className="w-4 h-4" />
                 )}
-              </button>
+              </motion.button>
 
               {/* Mobile Menu Toggle */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setMobileMenuOpen(prev => !prev)}
-                className="lg:hidden p-2 rounded-md border border-hairline hover:bg-surface-1 transition-all text-ink-secondary hover:text-ink"
+                className="lg:hidden p-2 rounded-md border border-hairline hover:bg-surface-1 transition-all text-ink-secondary hover:text-ink flex items-center justify-center"
                 aria-label="Toggle Menu"
               >
-                {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-              </button>
+                {mobileMenuOpen ? <XMarkIcon className="w-4 h-4" /> : <Bars3Icon className="w-4 h-4" />}
+              </motion.button>
             </div>
           </div>
         </div>
@@ -491,55 +548,95 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
       className="relative flex flex-col items-center justify-center min-h-screen pt-28 pb-16 px-6 text-center overflow-hidden border-b border-hairline"
       style={{ background: "var(--canvas)" }}
     >
-      <div className="relative z-10 flex flex-col items-center max-w-5xl w-full">
+      <motion.div 
+        variants={heroContainerVariants}
+        initial="hidden"
+        animate="show"
+        className="relative z-10 flex flex-col items-center max-w-5xl w-full"
+      >
         {/* Active Engine Indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 border border-hairline bg-surface-1">
+        <motion.div 
+          variants={heroItemVariants}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 border border-hairline bg-surface-1"
+        >
           <span className={`w-1.5 h-1.5 rounded-full ${state === "success" ? "bg-emerald-500 animate-pulse" : "bg-ink"}`} />
-          <span className="text-ink-secondary font-sans text-sm font-medium">
+          <span className="caption text-ink-secondary font-medium">
             Orchestrator: <span className="text-ink font-semibold">{state === "typing" ? "Ingesting" : state === "ingest" ? "Parsing" : state === "resolving" ? "Executing" : "Resolved"}</span>
           </span>
-        </div>
+        </motion.div>
 
         {/* Aggressive Display Headline */}
-        <h1 className="display-1 max-w-4xl mb-6 text-ink tracking-[-0.04em] leading-[1.05] font-semibold">
+        <motion.h1 
+          variants={heroItemVariants}
+          className="display-1 max-w-4xl mb-6 text-ink tracking-[-0.04em] leading-[1.05] font-semibold"
+        >
           Stop managing email.
           <br />
           <span className="opacity-50">Start managing outcomes.</span>
-        </h1>
+        </motion.h1>
 
-        <p className="body-md max-w-2xl mb-10 text-ink-secondary leading-relaxed font-sans">
+        <motion.p 
+          variants={heroItemVariants}
+          className="body-md max-w-2xl mb-10 text-ink-secondary leading-relaxed"
+        >
           Syncar is the local-first command layer for communication. Connect Gmail and Google Calendar to turn scattered threads into high-speed, automated AI workflows.
-        </p>
+        </motion.p>
 
         {/* Call to Actions (Hero rounded exceptions) */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 mb-16">
+        <motion.div 
+          variants={heroItemVariants}
+          className="flex flex-col sm:flex-row items-center gap-3 mb-16"
+        >
           {isLoaded && !isSignedIn && (
             <>
-              <Link href="/sign-up" className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2">
+              <MotionLink 
+                href="/sign-up" 
+                whileHover="hover"
+                whileTap={{ scale: 0.98 }}
+                className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2"
+              >
                 Connect Workspace Free
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a href="#transform" className="btn-lovable-outline px-6 py-3 text-sm font-medium rounded-md text-ink inline-flex items-center gap-2">
+                <motion.span variants={arrowVariants} className="flex items-center justify-center">
+                  <ArrowRightIcon className="w-4 h-4" />
+                </motion.span>
+              </MotionLink>
+              <motion.a 
+                href="#transform" 
+                whileHover="hover"
+                whileTap={{ scale: 0.98 }}
+                className="btn-lovable-outline px-6 py-3 text-sm font-medium rounded-md text-ink inline-flex items-center gap-2"
+              >
                 See Comparative Flow
-              </a>
+                <motion.span variants={arrowVariants} className="flex items-center justify-center">
+                  <ArrowRightIcon className="w-4 h-4" />
+                </motion.span>
+              </motion.a>
             </>
           )}
           {isLoaded && isSignedIn && (
-            <Link href="/inbox" className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2">
+            <MotionLink 
+              href="/inbox" 
+              whileHover="hover"
+              whileTap={{ scale: 0.98 }}
+              className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2"
+            >
               Enter My Workspace
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+              <motion.span variants={arrowVariants} className="flex items-center justify-center">
+                <ArrowRightIcon className="w-4 h-4" />
+              </motion.span>
+            </MotionLink>
           )}
-        </div>
+        </motion.div>
 
         {/* Immersive Living Workflow Canvas */}
-        <div 
+        <motion.div 
+          variants={heroItemVariants}
           className="w-full max-w-4xl rounded-xl border border-hairline overflow-hidden relative shadow-sm flex flex-col p-8 bg-surface-1"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between border-b border-hairline pb-4 mb-6">
             <span className="text-sm font-medium text-ink-secondary">Interactive simulator</span>
-            <div className="text-sm bg-ink/5 text-ink font-medium px-2.5 py-0.5 rounded-md border border-ink/10 font-sans">
+            <div className="caption bg-ink/5 text-ink font-medium px-2.5 py-0.5 rounded-md border border-ink/10">
               {currentScenario.badge}
             </div>
           </div>
@@ -553,7 +650,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
               <div 
                 className="p-4 rounded-lg border border-hairline min-h-[90px] flex items-start gap-2 relative bg-[#f7f4ed] dark:bg-surface-2 shadow-inner"
               >
-                <div className="text-sm font-normal text-ink leading-relaxed font-sans">
+                <div className="caption text-ink leading-relaxed">
                   "{typedPrompt}"
                   {state === "typing" && <span className="animate-pulse text-ink font-bold">|</span>}
                 </div>
@@ -576,7 +673,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                       : "bg-surface-1 border-hairline text-ink-muted"
                   }`}
                 >
-                  <Bot className="w-6 h-6" />
+                  <CpuChipIcon className="w-6 h-6" />
                 </div>
               </div>
 
@@ -589,7 +686,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                       initial={{ y: 8, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -8, opacity: 0 }}
-                      className="text-sm text-ink-secondary font-medium font-sans"
+                      className="caption text-ink-secondary font-medium"
                     >
                       {currentScenario.steps[0]}
                     </motion.span>
@@ -599,7 +696,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                       key="success-log"
                       initial={{ y: 8, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
-                      className="text-sm text-emerald-600 font-semibold font-sans"
+                      className="caption text-emerald-600 font-semibold"
                     >
                       ✔ Completed in 1.2s
                     </motion.span>
@@ -624,11 +721,11 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                     {/* Calendar slot creation */}
                     {currentScenario.calendarDetail && (
                       <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50/30 flex items-start gap-2.5">
-                        <Calendar className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                        <CalendarIcon className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="text-sm font-semibold text-ink">{currentScenario.calendarDetail.title}</p>
-                          <p className="text-sm text-ink-secondary flex items-center gap-1 mt-0.5 font-sans">
-                            <Clock className="w-3.5 h-3.5 text-ink-muted" /> {currentScenario.calendarDetail.time}
+                          <p className="caption text-ink-secondary flex items-center gap-1 mt-0.5">
+                            <ClockIcon className="w-3.5 h-3.5 text-ink-muted" /> {currentScenario.calendarDetail.time}
                           </p>
                         </div>
                       </div>
@@ -637,7 +734,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                     {/* Email draft created */}
                     {currentScenario.emailDetail && (
                       <div className="p-3 rounded-lg border border-hairline bg-surface-1 flex items-start gap-2.5 max-w-full">
-                        <Mail className="w-4 h-4 text-ink mt-0.5 flex-shrink-0" />
+                        <EnvelopeIcon className="w-4 h-4 text-ink mt-0.5 flex-shrink-0" />
                         <div className="overflow-hidden flex-1 text-sm">
                           <p className="text-sm text-ink-muted">To: {currentScenario.emailDetail.to}</p>
                           <p className="font-semibold text-ink truncate mt-0.5">{currentScenario.emailDetail.subject}</p>
@@ -648,16 +745,16 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                   </motion.div>
                 ) : (
                   <div className="flex flex-col items-center justify-center p-8 border border-dashed border-hairline rounded-lg text-center h-[160px] text-zinc-400 w-full">
-                    <Clock className="w-4 h-4 mb-2 animate-spin text-ink-muted" />
-                    <span className="text-sm font-sans text-ink-muted">Awaiting orchestrator...</span>
+                    <ClockIcon className="w-4 h-4 mb-2 animate-spin text-ink-muted" />
+                    <span className="caption text-ink-muted">Awaiting orchestrator...</span>
                   </div>
                 )}
               </AnimatePresence>
             </div>
 
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -715,12 +812,19 @@ function WorkflowTransformation() {
   };
 
   return (
-    <section id="transform" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="transform"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Comparison</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Friction Comparison</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             Siloed apps introduce coordination friction. Compare step-by-step clicks side-by-side.
           </p>
         </div>
@@ -728,11 +832,17 @@ function WorkflowTransformation() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           
           {/* Traditional Panel */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
+          <motion.div 
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.08, ease: EASE_EXPO }}
+            className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm"
+          >
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-hairline mb-8">
                 <span className="text-sm font-semibold text-ink-secondary flex items-center gap-1.5">
-                  <ArrowRightLeft className="w-3.5 h-3.5" /> Siloed Gmail + Calendar
+                  <ArrowsRightLeftIcon className="w-3.5 h-3.5" /> Siloed Gmail + Calendar
                 </span>
                 <span className="text-sm text-ink-muted font-semibold">17 steps</span>
               </div>
@@ -740,8 +850,9 @@ function WorkflowTransformation() {
               {/* Progress steps */}
               <div className="space-y-4 pr-2 text-left">
                 {traditionalSteps.map((step, idx) => (
-                  <div 
+                  <motion.div 
                     key={step.title} 
+                    layout
                     className={`p-3.5 rounded-lg border transition-all duration-200 ${
                       activeStep === idx 
                         ? "bg-surface-2 border-hairline-strong text-ink font-semibold" 
@@ -750,9 +861,9 @@ function WorkflowTransformation() {
                         : "bg-transparent border-transparent text-ink-secondary"
                     }`}
                   >
-                    <h4 className="text-sm font-semibold font-sans text-ink">{step.title}</h4>
-                    <p className="text-sm text-ink-secondary mt-1 leading-normal font-sans">{step.desc}</p>
-                  </div>
+                    <h4 className="caption font-semibold text-ink">{step.title}</h4>
+                    <p className="caption text-ink-secondary mt-1 leading-normal">{step.desc}</p>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -761,42 +872,50 @@ function WorkflowTransformation() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-sm font-medium text-ink-muted block">Clicks</span>
-                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">{clickCount}</p>
+                  <p className="text-xl font-semibold font-mono tracking-tight text-ink">{clickCount}</p>
                 </div>
                 <div className="text-right">
                   <span className="text-sm font-medium text-ink-muted block">Duration</span>
-                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">{timeText}</p>
+                  <p className="text-xl font-semibold font-mono tracking-tight text-ink">{timeText}</p>
                 </div>
               </div>
 
-              <button 
+              <motion.button 
                 onClick={triggerSimulation}
                 disabled={isPlaying}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 className="w-full btn-lovable-outline px-4 py-2.5 text-sm font-medium rounded-md text-ink transition-all flex items-center justify-center gap-2"
               >
                 {isPlaying ? "Simulating clicks..." : "Simulate clicks"}
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Syncar Panel */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
+          <motion.div 
+            initial={{ opacity: 0, x: 16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.16, ease: EASE_EXPO }}
+            className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm"
+          >
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-hairline mb-8">
                 <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5" /> Syncar Flow
+                  <BoltIcon className="w-3.5 h-3.5" /> Syncar Flow
                 </span>
                 <span className="text-sm text-ink-muted font-semibold">1 Action</span>
               </div>
 
               <div className="p-6 rounded-lg border border-hairline bg-[#f7f4ed] dark:bg-surface-2 flex flex-col gap-3 min-h-[160px] justify-center text-left">
                 <span className="text-sm font-medium text-ink-muted">Natural language prompt</span>
-                <div className="text-sm font-normal text-ink p-3 rounded bg-surface-1 border border-hairline select-none font-sans">
+                <div className="caption text-ink p-3 rounded bg-surface-1 border border-hairline select-none">
                   "Schedule meeting with Sarah next Thursday afternoon"
                 </div>
 
-                <div className="flex items-center gap-2 text-sm text-ink-secondary mt-1 font-sans">
-                  <Bot className="w-3.5 h-3.5 text-ink" />
+                <div className="flex items-center gap-2 caption text-ink-secondary mt-1">
+                  <CpuChipIcon className="w-3.5 h-3.5 text-ink" />
                   <span>Syncar maps intent, creates event, and drafts reply confirmation.</span>
                 </div>
               </div>
@@ -806,17 +925,19 @@ function WorkflowTransformation() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-sm font-medium text-ink-muted block">Clicks</span>
-                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">1 Action</p>
+                  <p className="text-xl font-semibold font-mono tracking-tight text-ink">1 Action</p>
                 </div>
                 <div className="text-right">
                   <span className="text-sm font-medium text-ink-muted block">Duration</span>
-                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">1.8 seconds</p>
+                  <p className="text-xl font-semibold font-mono tracking-tight text-ink">1.8 seconds</p>
                 </div>
               </div>
 
-              <button 
+              <motion.button 
                 onClick={triggerSyncar}
                 disabled={syncarStatus !== "idle"}
+                whileHover={syncarStatus === "idle" ? { scale: 1.01 } : {}}
+                whileTap={syncarStatus === "idle" ? { scale: 0.99 } : {}}
                 className={`w-full text-sm font-medium transition-all duration-300 py-2.5 rounded-md ${
                   syncarStatus === "success" 
                     ? "bg-emerald-550/10 border border-emerald-500/35 text-emerald-600 dark:text-emerald-400 cursor-default" 
@@ -826,19 +947,19 @@ function WorkflowTransformation() {
                 }`}
               >
                 {syncarStatus === "success" ? (
-                  <span className="flex items-center justify-center gap-1.5"><Check className="w-4 h-4" /> Workflow Dispatched</span>
+                  <span className="flex items-center justify-center gap-1.5"><CheckIcon className="w-4 h-4" /> Workflow Dispatched</span>
                 ) : syncarStatus === "running" ? (
                   <span>Executing...</span>
                 ) : (
-                  <span className="flex items-center justify-center gap-1.5"><Sparkles className="w-3.5 h-3.5 animate-pulse" /> Execute in 1 click</span>
+                  <span className="flex items-center justify-center gap-1.5"><SparklesIcon className="w-3.5 h-3.5 animate-pulse" /> Execute in 1 click</span>
                 )}
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -886,12 +1007,19 @@ function AICommandCenter() {
   };
 
   return (
-    <section id="commands" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="commands"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Command workspace</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">AI Command Center</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             Trigger visual outcomes instantly. Click on one of the presets to watch the assistant resolve the action.
           </p>
         </div>
@@ -899,8 +1027,10 @@ function AICommandCenter() {
         {/* Presets List */}
         <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
           {PRESETS.map((p, idx) => (
-            <button
+            <motion.button
               key={p.title}
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handlePresetClick(idx)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all border ${
                 activePreset === idx 
@@ -909,16 +1039,22 @@ function AICommandCenter() {
               }`}
             >
               {p.title}
-            </button>
+            </motion.button>
           ))}
         </div>
 
         {/* Chat assistant container */}
-        <div className="w-full max-w-4xl mx-auto rounded-xl border border-hairline overflow-hidden shadow-sm bg-surface-1">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.8, ease: EASE_EXPO }}
+          className="w-full max-w-4xl mx-auto rounded-xl border border-hairline overflow-hidden shadow-sm bg-surface-1"
+        >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-hairline bg-[#f7f4ed] dark:bg-surface-2">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-hairline bg-surface-2">
             <span className="text-sm font-semibold text-ink flex items-center gap-2">
-              <Bot className="w-4 h-4 text-ink" /> Syncar AI Assistant
+              <CpuChipIcon className="w-4 h-4 text-ink" /> Syncar AI Assistant
             </span>
             <span className="text-sm font-semibold text-ink-muted">Interactive shell</span>
           </div>
@@ -930,8 +1066,8 @@ function AICommandCenter() {
               <div className="space-y-5">
                 {/* User Message */}
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded bg-surface-2 flex items-center justify-center font-semibold text-sm text-ink-secondary flex-shrink-0 font-sans">U</div>
-                  <div className="text-sm font-normal text-ink leading-relaxed font-sans">
+                  <div className="w-7 h-7 rounded bg-surface-2 flex items-center justify-center font-semibold caption text-ink-secondary flex-shrink-0">U</div>
+                  <div className="caption text-ink leading-relaxed">
                     {promptInput || "Select a preset above to ask the assistant..."}
                     {executing && !activeSteps.length && <span className="animate-pulse text-ink">|</span>}
                   </div>
@@ -941,15 +1077,21 @@ function AICommandCenter() {
                 {activeSteps.length > 0 && (
                   <div className="flex items-start gap-3 border-t border-hairline pt-4">
                     <div className="w-7 h-7 rounded bg-ink text-canvas flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-3.5 h-3.5" />
+                      <CpuChipIcon className="w-3.5 h-3.5" />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 w-full">
                       <span className="text-sm font-medium text-ink-muted block">AI progress</span>
                       {activeSteps.map((step, idx) => (
-                        <div key={idx} className="text-sm text-ink-secondary flex items-center gap-2 leading-relaxed font-sans">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-ink flex-shrink-0" />
+                        <motion.div 
+                          key={idx}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.2, ease: EASE_OUT }}
+                          className="caption text-ink-secondary flex items-center gap-2 leading-relaxed"
+                        >
+                          <CheckCircleIcon className="w-3.5 h-3.5 text-ink flex-shrink-0" />
                           <span>{step}</span>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
@@ -957,7 +1099,7 @@ function AICommandCenter() {
               </div>
 
               {!executing && !resolved && (
-                <div className="text-sm text-ink-muted italic select-none font-sans">
+                <div className="caption text-ink-muted italic select-none">
                   Preset actions show checklist completions inside the assistant thread.
                 </div>
               )}
@@ -971,19 +1113,20 @@ function AICommandCenter() {
                 {resolved && activePreset !== null ? (
                   <motion.div
                     key={activePreset}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
+                    initial={{ opacity: 0, scale: 0.98, y: 8 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98, y: -8 }}
+                    transition={{ duration: 0.3, ease: EASE_OUT }}
                     className="space-y-4"
                   >
                     {PRESETS[activePreset].result.event && (
                       <div className="p-4 rounded-lg border border-hairline bg-surface-1">
                         <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-2">
-                          <Calendar className="w-3.5 h-3.5" /> Calendar block created
+                          <CalendarIcon className="w-3.5 h-3.5" /> Calendar block created
                         </span>
                         <h4 className="text-sm font-semibold text-ink font-sans">{PRESETS[activePreset].result.event.title}</h4>
-                        <p className="text-sm text-ink-secondary mt-1 flex items-center gap-1 font-sans">
-                          <Clock className="w-3.5 h-3.5 text-ink-muted" /> {PRESETS[activePreset].result.event.time}
+                        <p className="caption text-ink-secondary mt-1 flex items-center gap-1">
+                          <ClockIcon className="w-3.5 h-3.5 text-ink-muted" /> {PRESETS[activePreset].result.event.time}
                         </p>
                       </div>
                     )}
@@ -991,11 +1134,11 @@ function AICommandCenter() {
                     {PRESETS[activePreset].result.email && (
                       <div className="p-4 rounded-lg border border-hairline bg-surface-1 text-sm">
                         <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-2">
-                          <Mail className="w-3.5 h-3.5" /> Gmail draft confirmation
+                          <EnvelopeIcon className="w-3.5 h-3.5" /> Gmail draft confirmation
                         </span>
-                        <p className="text-sm text-ink-muted font-sans">To: {PRESETS[activePreset].result.email.to}</p>
-                        <p className="font-semibold text-ink mt-0.5 truncate font-sans">{PRESETS[activePreset].result.email.subject}</p>
-                        <p className="text-sm text-ink-secondary mt-1.5 italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed font-sans">
+                        <p className="caption text-ink-muted">To: {PRESETS[activePreset].result.email.to}</p>
+                        <p className="caption font-semibold text-ink mt-0.5 truncate">{PRESETS[activePreset].result.email.subject}</p>
+                        <p className="caption text-ink-secondary mt-1.5 italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed">
                           "{PRESETS[activePreset].result.email.body}"
                         </p>
                       </div>
@@ -1004,15 +1147,15 @@ function AICommandCenter() {
                     {PRESETS[activePreset].result.digest && (
                       <div className="p-4 rounded-lg border border-hairline bg-surface-1 space-y-3">
                         <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-1.5">
-                          <Bot className="w-3.5 h-3.5" /> Focus Digest Brief
+                          <CpuChipIcon className="w-3.5 h-3.5" /> Focus Digest Brief
                         </span>
                         {PRESETS[activePreset].result.digest.map((d, index) => (
                           <div key={index} className="border-t border-hairline pt-2 first:border-0 first:pt-0">
-                            <div className="flex items-center justify-between mb-0.5 font-sans">
+                            <div className="flex items-center justify-between mb-0.5 caption">
                               <span className="text-sm font-semibold text-ink">{d.from}</span>
                               <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-ink/5 text-ink">{d.priority}</span>
                             </div>
-                            <p className="text-sm text-ink-secondary leading-snug font-sans">{d.text}</p>
+                            <p className="caption text-ink-secondary leading-snug">{d.text}</p>
                           </div>
                         ))}
                       </div>
@@ -1020,17 +1163,17 @@ function AICommandCenter() {
                   </motion.div>
                 ) : (
                   <div className="flex flex-col items-center justify-center p-8 border border-dashed border-hairline rounded-lg text-center h-[200px] text-ink-muted">
-                    <Sliders className="w-5 h-5 text-hairline mb-2" />
-                    <span className="text-sm font-sans">Awaiting prompt submission...</span>
+                    <AdjustmentsHorizontalIcon className="w-5 h-5 text-hairline mb-2" />
+                    <span className="caption">Awaiting prompt submission...</span>
                   </div>
                 )}
               </AnimatePresence>
             </div>
 
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1058,13 +1201,27 @@ function ChaosToClarity() {
     }, 1500);
   };
 
+  const displayedEmails = isSorted 
+    ? [...rawEmails].sort((a, b) => {
+        const priorityOrder: Record<string, number> = { HIGH: 1, MEDIUM: 2, LOW: 3 };
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      })
+    : rawEmails;
+
   return (
-    <section id="clarity" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="clarity"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Priority classification</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">From Chaos to Clarity</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             Say goodbye to unsorted inboxes. Syncar categorizes priority queues, letting you focus on the details that require actions.
           </p>
         </div>
@@ -1074,146 +1231,144 @@ function ChaosToClarity() {
           {/* Left Column: Flow Trigger (5 Columns) */}
           <div className="lg:col-span-5 space-y-6 text-left">
             <h3 className="heading-2 text-ink font-semibold tracking-[-0.02em]">Clean workspace priorities</h3>
-            <p className="body-sm text-ink-secondary leading-relaxed font-sans">
+            <p className="body-sm text-ink-secondary leading-relaxed">
               When emails sync locally, background workers map key metadata to Gemini. Syncar analyzes thread context, calendar slots, and contact values to organize them into priorities.
             </p>
 
-            <button
+            <motion.button
               onClick={runSorting}
               disabled={isSorting}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               className="px-5 py-2.5 inline-flex items-center gap-2 text-sm font-medium rounded-md bg-ink text-canvas hover:opacity-90 transition-all cursor-pointer"
             >
               {isSorting ? (
                 <>
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
                   <span>Classifying...</span>
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <SparklesIcon className="w-3.5 h-3.5" />
                   <span>Run priority classification</span>
                 </>
               )}
-            </button>
+            </motion.button>
           </div>
 
           {/* Right Column: Visualizer Box (7 Columns) */}
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, ease: EASE_EXPO }}
             className="lg:col-span-7 rounded-xl border border-hairline p-6 relative overflow-hidden bg-surface-1 min-h-[340px] flex flex-col justify-between shadow-sm"
           >
             {/* Header bar */}
             <div className="flex items-center justify-between pb-4 border-b border-hairline">
               <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-ink" /> Local cache inbox
+                <ServerIcon className="w-3.5 h-3.5 text-ink" /> Local cache inbox
               </span>
               <span className="text-sm bg-ink/5 text-ink font-medium px-2.5 py-0.5 rounded-md border border-ink/10">
                 {isSorted ? "Classified" : isSorting ? "Parsing..." : "Pending Classify"}
               </span>
             </div>
 
-            <div className="my-6 relative flex-1 flex flex-col justify-center text-left">
-              <AnimatePresence mode="wait">
-                {!isSorted && !isSorting ? (
-                  // Initial chaotic list
-                  <motion.div 
-                    key="unsorted"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="space-y-2.5"
-                  >
-                    {rawEmails.map((item) => (
-                      <div 
-                        key={item.id}
-                        className="p-3.5 rounded-lg border border-hairline bg-surface-2 flex items-center justify-between"
-                      >
-                        <div className="overflow-hidden flex-1 pr-4 text-sm font-sans">
-                          <span className="text-sm font-semibold text-ink-muted">{item.from}</span>
-                          <h4 className="font-semibold text-ink truncate mt-0.5">{item.subject}</h4>
-                        </div>
-                        <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-[#f2eee5] dark:bg-surface-3 text-ink-secondary border border-hairline/60 font-sans">
-                          Pending AI
-                        </span>
+            <div className="my-6 relative flex-1 flex flex-col justify-center text-left min-h-[220px]">
+              <div className="space-y-2.5 relative">
+                {/* Sorting progress scanner overlay */}
+                <AnimatePresence>
+                  {isSorting && (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-canvas/30 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center gap-3 rounded-lg"
+                    >
+                      <div className="relative w-12 h-12 flex items-center justify-center">
+                        <motion.div 
+                          animate={{ rotate: 360 }}
+                          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                          className="absolute inset-0 border-2 border-ink rounded-full border-t-transparent"
+                        />
+                        <CpuChipIcon className="w-5 h-5 text-ink" />
                       </div>
-                    ))}
-                  </motion.div>
-                ) : isSorting ? (
-                  // Sorting progress visualization
-                  <motion.div 
-                    key="sorting"
-                    className="flex flex-col items-center justify-center p-8 gap-4"
-                  >
-                    <div className="relative w-16 h-16 flex items-center justify-center">
-                      <motion.div 
-                        animate={{ scale: [1, 1.1, 1], rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                        className="absolute inset-0 border-2 border-ink rounded-full border-t-transparent"
-                      />
-                      <Bot className="w-5 h-5 text-ink" />
-                    </div>
-                    <span className="text-sm text-ink font-medium animate-pulse font-sans">Running priority matrix...</span>
-                  </motion.div>
-                ) : (
-                  // Sorted priority stream (unified list, opacity reduction for low priority)
-                  <motion.div 
-                    key="sorted"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="space-y-2.5"
-                  >
-                    {rawEmails.map((item) => (
-                      <div 
-                        key={item.id}
-                        className={`p-3.5 rounded-lg border flex items-center justify-between transition-all duration-300 ${
-                          item.priority === "HIGH" 
-                            ? "bg-surface-1 border-red-200 dark:border-red-900/30 bg-red-50/10 dark:bg-red-950/10" 
-                            : item.priority === "MEDIUM"
-                            ? "bg-surface-1 border-amber-200 dark:border-amber-900/30 bg-amber-50/10 dark:bg-amber-950/10"
-                            : "bg-surface-1 border-hairline opacity-50"
-                        }`}
-                      >
-                        <div className="overflow-hidden flex-1 pr-4 text-sm font-sans">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-ink-muted">{item.from}</span>
-                            {item.priority === "HIGH" ? (
+                      <span className="caption text-ink font-semibold animate-pulse">Running priority matrix...</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {displayedEmails.map((item) => {
+                  const isHigh = item.priority === "HIGH";
+                  const isMed = item.priority === "MEDIUM";
+                  const isLow = item.priority === "LOW";
+                  
+                  return (
+                    <motion.div 
+                      key={item.id}
+                      layout
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30
+                      }}
+                      className={`p-3.5 rounded-lg border flex items-center justify-between transition-all duration-300 ${
+                        !isSorted
+                          ? "bg-surface-2 border-hairline text-ink"
+                          : isHigh 
+                          ? "bg-surface-1 border-red-250 dark:border-red-900/30 bg-red-50/10 dark:bg-red-950/10 text-ink" 
+                          : isMed
+                          ? "bg-surface-1 border-amber-250 dark:border-amber-900/30 bg-amber-50/10 dark:bg-amber-950/10 text-ink"
+                          : "bg-surface-1 border-hairline opacity-50 text-ink-muted"
+                      }`}
+                    >
+                      <div className="overflow-hidden flex-1 pr-4 caption">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-ink-muted">{item.from}</span>
+                          {isSorted && (
+                            isHigh ? (
                               <span className="text-xs font-semibold bg-red-100/50 dark:bg-red-950/30 text-red-700 dark:text-red-400 px-1.5 py-0.5 rounded">High</span>
-                            ) : item.priority === "MEDIUM" ? (
+                            ) : isMed ? (
                               <span className="text-xs font-semibold bg-amber-100/50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded">Medium</span>
                             ) : (
                               <span className="text-xs font-semibold bg-[#f2eee5]/50 dark:bg-surface-3/50 text-ink-muted px-1.5 py-0.5 rounded">Low</span>
-                            )}
-                          </div>
-                          <h4 className="font-semibold text-ink truncate mt-0.5">{item.subject}</h4>
+                            )
+                          )}
                         </div>
-                        {item.priority === "LOW" ? (
-                          <span className="text-sm text-ink-muted font-medium italic font-sans">Auto-archived</span>
-                        ) : (
-                          <span className="text-sm text-emerald-700 dark:text-emerald-400 font-semibold font-sans">Priority Classified</span>
-                        )}
+                        <h4 className="font-semibold text-ink truncate mt-0.5">{item.subject}</h4>
                       </div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      {isSorted && isLow ? (
+                        <span className="caption text-ink-muted font-medium italic">Auto-archived</span>
+                      ) : isSorted ? (
+                        <span className="caption text-emerald-700 dark:text-emerald-400 font-semibold">Priority Classified</span>
+                      ) : (
+                        <span className="caption font-medium px-2 py-0.5 rounded-md bg-[#f2eee5] dark:bg-surface-3 text-ink-secondary border border-hairline/60">
+                          Pending AI
+                        </span>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Smart Digest Summary */}
             <div className="p-4 rounded-lg bg-[#f7f4ed] dark:bg-surface-2 border border-hairline flex items-start gap-2.5 text-sm text-left">
-              <Bot className="w-5 h-5 text-ink flex-shrink-0 mt-0.5" />
+              <CpuChipIcon className="w-5 h-5 text-ink flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-ink block font-sans">AI Focus Summary:</span>
-                <span className="text-ink-secondary mt-1 block leading-relaxed font-sans">
+                <span className="caption font-semibold text-ink block">AI Focus Summary:</span>
+                <span className="caption text-ink-secondary mt-1 block leading-relaxed">
                   {isSorted 
                     ? "2 urgent high priority threads need your response. Newsletter archive scheduled." 
                     : "Inbox currently unparsed. Trigger sorting to run prioritization index."}
                 </span>
               </div>
             </div>
-          </div>
-
+          </motion.div>
         </div>
+
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1230,12 +1385,19 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
   };
 
   return (
-    <section id="intelligence" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="intelligence"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Coordinate Extract</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Calendar Intelligence</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             Schedule meetings without app hopping. Syncar highlights proposed slots and books events directly from email context.
           </p>
         </div>
@@ -1243,22 +1405,28 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Email Pane (Left - 6 Columns) */}
-          <div className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
+          <motion.div 
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.08, ease: EASE_EXPO }}
+            className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm"
+          >
             <div>
               {/* Email Header */}
               <div className="flex items-center justify-between pb-4 border-b border-hairline mb-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded bg-surface-2 text-ink flex items-center justify-center font-bold text-sm font-sans">S</div>
+                  <div className="w-8 h-8 rounded bg-surface-2 text-ink flex items-center justify-center font-bold caption">S</div>
                   <div>
                     <h4 className="text-sm font-semibold text-ink font-sans">Sarah Chen</h4>
-                    <p className="text-sm text-ink-muted font-sans">sarah@partner-firm.com</p>
+                    <p className="caption text-ink-muted">sarah@partner-firm.com</p>
                   </div>
                 </div>
-                <span className="text-sm text-ink-muted font-sans font-medium">Yesterday, 4:18 PM</span>
+                <span className="caption font-mono text-ink-muted font-semibold">Yesterday, 4:18 PM</span>
               </div>
 
               <div>
-                <span className="text-sm font-medium text-ink-secondary font-sans">Subject: Partnership Deck Coordination</span>
+                <span className="caption font-semibold text-ink-secondary">Subject: Partnership Deck Coordination</span>
                 
                 {/* Email Body */}
                 <div className="mt-4 text-sm text-ink-secondary leading-relaxed bg-surface-2 p-4 rounded-lg border border-hairline">
@@ -1267,23 +1435,27 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                   <p>
                     I reviewed the proposal documents. Let's sync up for 30 minutes to lock in the final revisions. 
                     I checked my calendar and I can do{" "}
-                    <span 
+                    <motion.span 
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onMouseEnter={() => setHoveredTime("tuesday")}
                       onMouseLeave={() => setHoveredTime(null)}
                       onClick={() => confirmMeeting("tuesday")}
-                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all font-sans"
+                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all caption"
                     >
                       next Tuesday at 2:00 PM
-                    </span>{" "}
+                    </motion.span>{" "}
                     or{" "}
-                    <span
+                    <motion.span
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onMouseEnter={() => setHoveredTime("friday")}
                       onMouseLeave={() => setHoveredTime(null)}
                       onClick={() => confirmMeeting("friday")}
-                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all font-sans"
+                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all caption"
                     >
                       Friday at 11:00 AM
-                    </span>
+                    </motion.span>
                     .
                   </p>
                   <br />
@@ -1295,37 +1467,45 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-hairline text-sm text-ink-muted flex items-center gap-2 font-sans">
-              <Bot className="w-3.5 h-3.5 text-ink" />
+            <div className="mt-6 pt-4 border-t border-hairline caption text-ink-muted flex items-center gap-2">
+              <CpuChipIcon className="w-3.5 h-3.5 text-ink" />
               <span>Hover over dates in the email to preview calendar slots. Click to schedule.</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Calendar Day Grid (Right - 6 Columns) */}
-          <div className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
+          <motion.div 
+            initial={{ opacity: 0, x: 16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.16, ease: EASE_EXPO }}
+            className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm"
+          >
             <div className="w-full">
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-hairline mb-6">
                 <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-ink" /> Calendar Day Agenda
+                  <CalendarIcon className="w-3.5 h-3.5 text-ink" /> Calendar Day Agenda
                 </span>
-                <span className="text-sm text-ink-muted font-medium font-sans">June 2026</span>
+                <span className="caption text-ink-muted font-medium">June 2026</span>
               </div>
 
               {/* Day schedules */}
               <div className="space-y-6">
                 {/* Tuesday Schedule */}
                 <div>
-                  <span className="text-sm font-medium text-ink-secondary font-sans">Tuesday, June 16</span>
+                  <span className="caption font-semibold text-ink-secondary">Tuesday, June 16</span>
                   <div className="mt-2 space-y-2">
                     <div className="p-3 rounded border border-hairline bg-surface-2 text-sm flex items-center justify-between">
-                      <span className="text-ink-secondary font-sans">10:00 AM - Internal Sync</span>
-                      <span className="text-sm text-ink-muted font-sans font-medium">1h</span>
+                      <span className="text-ink-secondary caption">10:00 AM - Internal Sync</span>
+                      <span className="caption font-mono text-ink-muted font-semibold">1h</span>
                     </div>
 
                     {/* Interactive Slot */}
-                    <div 
+                    <motion.div 
                       onClick={() => confirmMeeting("tuesday")}
+                      whileHover={{ x: 4 }}
+                      whileTap={{ scale: 0.99 }}
                       className={`p-3 rounded border border-dashed transition-all duration-300 text-sm flex items-center justify-between cursor-pointer ${
                         bookedSlot === "tuesday"
                           ? "bg-emerald-550 border-emerald-300 text-emerald-700 font-semibold"
@@ -1341,18 +1521,20 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                           ? "💡 Suggestion: Finalize Revisions (Sarah)" 
                           : "2:00 PM - Available slot"}
                       </span>
-                      <span className="text-sm text-ink-muted font-sans font-medium">30m</span>
-                    </div>
+                      <span className="caption font-mono text-ink-muted font-semibold">30m</span>
+                    </motion.div>
                   </div>
                 </div>
 
                 {/* Friday Schedule */}
                 <div>
-                  <span className="text-sm font-medium text-ink-secondary font-sans">Friday, June 19</span>
+                  <span className="caption font-semibold text-ink-secondary">Friday, June 19</span>
                   <div className="mt-2 space-y-2">
                     {/* Interactive Slot */}
-                    <div 
+                    <motion.div 
                       onClick={() => confirmMeeting("friday")}
+                      whileHover={{ x: 4 }}
+                      whileTap={{ scale: 0.99 }}
                       className={`p-3 rounded border border-dashed transition-all duration-300 text-sm flex items-center justify-between cursor-pointer ${
                         bookedSlot === "friday"
                           ? "bg-emerald-555 border-emerald-300 text-emerald-700 font-semibold"
@@ -1368,30 +1550,32 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                           ? "💡 Suggestion: Finalize Revisions (Sarah)" 
                           : "11:00 AM - Available slot"}
                       </span>
-                      <span className="text-sm text-ink-muted font-sans font-medium">30m</span>
-                    </div>
+                      <span className="caption font-mono text-ink-muted font-semibold">30m</span>
+                    </motion.div>
 
                     <div className="p-3 rounded border border-hairline bg-surface-2 text-sm flex items-center justify-between">
-                      <span className="text-ink-secondary font-sans">1:00 PM - Design Sign-off</span>
-                      <span className="text-sm text-ink-muted font-sans font-medium">1.5h</span>
+                      <span className="text-ink-secondary caption">1:00 PM - Design Sign-off</span>
+                      <span className="caption font-mono text-ink-muted font-semibold">1.5h</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {bookedSlot && (
-                <button 
+                <motion.button 
                   onClick={() => setBookedSlot(null)}
-                  className="mt-4 text-sm text-ink hover:underline w-full text-right font-semibold font-sans"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="mt-4 caption text-ink hover:underline w-full text-right font-semibold block"
                 >
                   Reset bookings
-                </button>
+                </motion.button>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1440,12 +1624,19 @@ function UnifiedWorkspaceSection({
   const activeEmail = emails[selectedMailIndex];
 
   return (
-    <section id="workspace" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="workspace"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Unified Dashboard</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">A single source of truth</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             No separate apps. Mail, calendar, and your AI assistant work together. Click on emails below to witness live cross-pane updates.
           </p>
         </div>
@@ -1453,8 +1644,10 @@ function UnifiedWorkspaceSection({
         {/* View togglers */}
         <div className="flex justify-center gap-3 mb-8">
           {(["inbox", "calendar", "ai"] as const).map((view) => (
-            <button
+            <motion.button
               key={view}
+              whileHover={{ y: -1 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setWorkspaceView(view)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all border ${
                 workspaceView === view 
@@ -1463,12 +1656,16 @@ function UnifiedWorkspaceSection({
               }`}
             >
               {view} view
-            </button>
+            </motion.button>
           ))}
         </div>
 
         {/* High-fidelity mockup box with single shadow */}
-        <div 
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.99 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-120px" }}
+          transition={{ duration: 0.8, ease: EASE_EXPO }}
           className="w-full rounded-xl overflow-hidden border border-hairline shadow-sm bg-surface-1"
         >
           {/* Mock title bar */}
@@ -1478,7 +1675,7 @@ function UnifiedWorkspaceSection({
               <div className="w-2 h-2 rounded-full bg-hairline" />
               <div className="w-2 h-2 rounded-full bg-hairline" />
             </div>
-            <div className="flex-1 flex items-center justify-center max-w-[280px] mx-auto bg-[#f2eee5] dark:bg-surface-3 border border-hairline rounded-md py-0.5 px-3 text-sm text-ink-secondary font-sans font-medium">
+            <div className="flex-1 flex items-center justify-center max-w-[280px] mx-auto bg-[#f2eee5] dark:bg-surface-3 border border-hairline rounded-md py-0.5 px-3 caption text-ink-secondary font-medium">
               workspace.syncar.ai/{workspaceView}
             </div>
           </div>
@@ -1489,14 +1686,16 @@ function UnifiedWorkspaceSection({
             {/* INBOX COLUMN (4 Columns) */}
             <div className={`md:col-span-4 border-r border-hairline p-4 flex flex-col justify-between bg-surface-1 text-left ${workspaceView !== "inbox" ? "hidden md:flex" : ""}`}>
               <div>
-                <span className="text-sm font-medium text-ink-muted block mb-4 flex items-center gap-1.5 font-sans">
-                  <Mail className="w-3.5 h-3.5 text-ink" /> Synced Inbox
+                <span className="caption font-medium text-ink-muted block mb-4 flex items-center gap-1.5">
+                  <EnvelopeIcon className="w-3.5 h-3.5 text-ink" /> Synced Inbox
                 </span>
 
                 <div className="space-y-2">
                   {emails.map((mail, idx) => (
-                    <div
+                    <motion.div
                       key={mail.from}
+                      whileHover={{ x: 2 }}
+                      whileTap={{ scale: 0.99 }}
                       onClick={() => setSelectedMailIndex(idx)}
                       className={`p-3 rounded-lg border text-left cursor-pointer transition-all duration-150 ${
                         selectedMailIndex === idx 
@@ -1504,15 +1703,15 @@ function UnifiedWorkspaceSection({
                           : "bg-transparent border-transparent hover:bg-surface-2"
                       }`}
                     >
-                      <div className="flex items-center justify-between font-sans">
+                      <div className="flex items-center justify-between caption">
                         <span className="text-sm font-semibold text-ink">{mail.from}</span>
-                        <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-[#1c1c1c]/5 text-ink font-sans">
+                        <span className="caption text-xs font-semibold px-1.5 py-0.5 rounded bg-ink/5 text-ink">
                           {mail.priority}
                         </span>
                       </div>
-                      <h4 className="text-sm text-ink-secondary mt-1 truncate font-sans">{mail.subject}</h4>
-                      <span className="text-sm text-ink-muted block mt-2 font-sans font-medium">{mail.time}</span>
-                    </div>
+                      <h4 className="caption text-ink-secondary mt-1 truncate">{mail.subject}</h4>
+                      <span className="caption text-ink-muted block mt-2 font-medium">{mail.time}</span>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -1521,8 +1720,8 @@ function UnifiedWorkspaceSection({
             {/* CALENDAR COLUMN (4 Columns) */}
             <div className={`md:col-span-4 border-r border-hairline p-4 flex flex-col justify-between bg-surface-1 text-left ${workspaceView !== "calendar" ? "hidden md:flex" : ""}`}>
               <div>
-                <span className="text-sm font-medium text-ink-muted block mb-4 flex items-center gap-1.5 font-sans">
-                  <Calendar className="w-3.5 h-3.5 text-ink" /> Calendar Agenda
+                <span className="caption font-medium text-ink-muted block mb-4 flex items-center gap-1.5">
+                  <CalendarIcon className="w-3.5 h-3.5 text-ink" /> Calendar Agenda
                 </span>
 
                 <div className="space-y-3">
@@ -1531,8 +1730,8 @@ function UnifiedWorkspaceSection({
                       ? "bg-ink/5 border-ink text-ink font-semibold"
                       : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-ink-muted font-medium">11:00 AM - 11:30 AM</span>
-                    <span className="text-sm font-semibold block mt-0.5 font-sans">Partnership Sync</span>
+                    <span className="caption block text-ink-muted font-medium">11:00 AM - 11:30 AM</span>
+                    <span className="caption font-semibold block mt-0.5">Partnership Sync</span>
                   </div>
  
                   <div className={`p-3 rounded-lg border transition-all duration-300 ${
@@ -1540,8 +1739,8 @@ function UnifiedWorkspaceSection({
                       ? "bg-ink/5 border-ink text-ink font-semibold"
                       : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-ink-muted font-medium">2:00 PM - 2:30 PM</span>
-                    <span className="text-sm font-semibold block mt-0.5 font-sans">Database Bug Debugging</span>
+                    <span className="caption block text-ink-muted font-medium">2:00 PM - 2:30 PM</span>
+                    <span className="caption font-semibold block mt-0.5">Database Bug Debugging</span>
                   </div>
  
                   <div className={`p-3 rounded-lg border transition-all duration-300 ${
@@ -1549,8 +1748,8 @@ function UnifiedWorkspaceSection({
                       ? "bg-ink/5 border-ink text-ink font-semibold"
                       : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-ink-muted font-medium">4:00 PM - 4:45 PM</span>
-                    <span className="text-sm font-semibold block mt-0.5 font-sans">Design Sign-off Review</span>
+                    <span className="caption block text-ink-muted font-medium">4:00 PM - 4:45 PM</span>
+                    <span className="caption font-semibold block mt-0.5">Design Sign-off Review</span>
                   </div>
                 </div>
               </div>
@@ -1559,36 +1758,51 @@ function UnifiedWorkspaceSection({
             {/* AI CONTEXT COLUMN (4 Columns) */}
             <div className={`md:col-span-4 p-4 flex flex-col justify-between bg-surface-2 text-left ${workspaceView !== "ai" ? "hidden md:flex" : ""}`}>
               <div className="space-y-4">
-                <span className="text-sm font-medium text-ink-muted block flex items-center gap-1.5 font-sans">
-                  <Bot className="w-3.5 h-3.5 text-ink" /> AI Context Assistant
+                <span className="caption font-medium text-ink-muted block flex items-center gap-1.5">
+                  <CpuChipIcon className="w-3.5 h-3.5 text-ink" /> AI Context Assistant
                 </span>
  
-                {/* Email Summary Box */}
-                <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
-                  <span className="text-sm font-medium text-ink-muted block mb-1 font-sans">Context summary</span>
-                  <p className="text-sm text-ink leading-relaxed font-sans">{activeEmail.summary}</p>
-                </div>
- 
-                {/* AI Draft Suggestion */}
-                <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
-                  <span className="text-sm font-semibold text-ink block mb-2 flex items-center gap-1 font-sans">
-                    <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Auto-reply draft
-                  </span>
-                  <p className="text-sm text-ink-secondary italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed font-sans">
-                    "{activeEmail.aiDraft}"
-                  </p>
-                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selectedMailIndex}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2, ease: EASE_OUT }}
+                    className="space-y-4"
+                  >
+                    {/* Email Summary Box */}
+                    <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
+                      <span className="caption font-medium text-ink-muted block mb-1">Context summary</span>
+                      <p className="caption text-ink leading-relaxed">{activeEmail.summary}</p>
+                    </div>
+     
+                    {/* AI Draft Suggestion */}
+                    <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
+                      <span className="caption font-semibold text-ink block mb-2 flex items-center gap-1">
+                        <SparklesIcon className="w-3.5 h-3.5 animate-pulse" /> Auto-reply draft
+                      </span>
+                      <p className="caption text-ink-secondary italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed">
+                        "{activeEmail.aiDraft}"
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
 
-              <button className="w-full btn-lovable-primary text-sm font-medium flex items-center gap-2 justify-center py-2.5 rounded-md">
-                <Send className="w-3.5 h-3.5" /> Dispatch Reply Draft
-              </button>
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full btn-lovable-primary text-sm font-medium flex items-center gap-2 justify-center py-2.5 rounded-md"
+              >
+                <PaperAirplaneIcon className="w-3.5 h-3.5" /> Dispatch Reply Draft
+              </motion.button>
             </div>
 
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1615,12 +1829,19 @@ function SpeedLayer({
   };
 
   return (
-    <section id="speed" className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      id="speed"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Keyboard First Engine</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Built for the Speed Layer</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             Keep your hands on the home row. Syncar matches Superhuman's extreme speed and Raycast's quick menus. Try it right now on this page.
           </p>
         </div>
@@ -1628,78 +1849,98 @@ function SpeedLayer({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           
           {/* Left Column: Command Palette UI (6 Columns) */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between min-h-[300px] text-left shadow-sm">
+          <motion.div 
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.08, ease: EASE_EXPO }}
+            className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between min-h-[300px] text-left shadow-sm"
+          >
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-hairline mb-6">
-                <span className="text-sm font-semibold text-ink flex items-center gap-1.5 font-sans">
-                  <Command className="w-3.5 h-3.5 text-ink" /> Quick Command Palette
+                <span className="caption font-semibold text-ink flex items-center gap-1.5">
+                  <CommandLineIcon className="w-3.5 h-3.5 text-ink" /> Quick Command Palette
                 </span>
-                <span className="text-sm text-ink-muted font-medium font-sans">Interactable</span>
+                <span className="caption text-ink-muted font-medium">Interactable</span>
               </div>
 
               {/* Clickable mock search bar */}
-              <div 
+              <motion.div 
                 onClick={triggerInputSearch}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 className="w-full flex items-center justify-between bg-[#f7f4ed] dark:bg-surface-2 border border-hairline p-3 rounded-lg hover:border-hairline-strong transition-all cursor-pointer shadow-inner"
               >
-                <span className="text-sm text-ink-secondary flex items-center gap-2 font-sans"><Search className="w-4 h-4 text-ink" /> Search commands or workflows...</span>
-                <kbd className="text-sm font-sans bg-surface-3 border border-hairline px-1.5 py-0.5 rounded text-ink font-bold">K</kbd>
-              </div>
+                <span className="caption text-ink-secondary flex items-center gap-2"><MagnifyingGlassIcon className="w-4 h-4 text-ink" /> Search commands or workflows...</span>
+                <kbd className="caption font-mono bg-surface-3 border border-hairline px-1.5 py-0.5 rounded text-ink font-bold">K</kbd>
+              </motion.div>
 
               <div className="space-y-2 mt-4">
-                <div 
+                <motion.div 
                   onClick={() => setView("inbox", "Opened Inbox", "I")}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.99 }}
                   className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Mail className="w-3.5 h-3.5 text-ink" /> Switch to Inbox</span>
-                  <span className="text-sm text-ink-muted font-sans font-medium">Press I</span>
-                </div>
-                <div 
+                  <span className="flex items-center gap-2 caption"><EnvelopeIcon className="w-3.5 h-3.5 text-ink" /> Switch to Inbox</span>
+                  <span className="caption font-mono text-ink-muted font-semibold">Press I</span>
+                </motion.div>
+                <motion.div 
                   onClick={() => setView("calendar", "Opened Calendar", "C")}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.99 }}
                   className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Calendar className="w-3.5 h-3.5 text-ink" /> Switch to Calendar</span>
-                  <span className="text-sm text-ink-muted font-sans font-medium">Press C</span>
-                </div>
-                <div 
+                  <span className="flex items-center gap-2 caption"><CalendarIcon className="w-3.5 h-3.5 text-ink" /> Switch to Calendar</span>
+                  <span className="caption font-mono text-ink-muted font-semibold">Press C</span>
+                </motion.div>
+                <motion.div 
                   onClick={() => setView("ai", "Opened AI Agent", "A")}
+                  whileHover={{ x: 4 }}
+                  whileTap={{ scale: 0.99 }}
                   className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Bot className="w-3.5 h-3.5 text-ink" /> Switch to AI Agent</span>
-                  <span className="text-sm text-ink-muted font-sans font-medium">Press A</span>
-                </div>
+                  <span className="flex items-center gap-2 caption"><CpuChipIcon className="w-3.5 h-3.5 text-ink" /> Switch to AI Agent</span>
+                  <span className="caption font-mono text-ink-muted font-semibold">Press A</span>
+                </motion.div>
               </div>
             </div>
 
-            <div className="text-sm text-ink-muted mt-4 border-t border-hairline pt-3 flex items-center gap-2 font-sans">
-              <Bot className="w-3.5 h-3.5 text-ink" />
+            <div className="caption text-ink-muted mt-4 border-t border-hairline pt-3 flex items-center gap-2">
+              <CpuChipIcon className="w-3.5 h-3.5 text-ink" />
               <span>Press those keys anywhere on this page to test live shortcuts.</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Speed details (6 Columns) */}
-          <div className="space-y-6 text-left">
+          <motion.div 
+            initial={{ opacity: 0, x: 16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-120px" }}
+            transition={{ duration: 0.8, delay: 0.16, ease: EASE_EXPO }}
+            className="space-y-6 text-left"
+          >
             <h3 className="heading-2 text-ink font-semibold tracking-[-0.02em]">Navigation at home row speeds</h3>
-            <p className="body-sm text-ink-secondary leading-relaxed font-sans">
+            <p className="body-sm text-ink-secondary leading-relaxed">
               Zero visual distractions, zero loading states. Syncar is built with keyboard triggers to let you traverse email replies, calendar coordinate bookings, search indices, and integrations with minimal resistance.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-xl border border-hairline bg-surface-1 shadow-sm">
-                <span className="text-sm font-semibold text-ink block mb-1 font-sans">Sub-100ms Ingest</span>
-                <p className="text-sm text-ink-secondary leading-relaxed font-sans">Cached index renders state changes offline instantly, saving changes to PostgreSQL in the background.</p>
+                <span className="caption font-semibold text-ink block mb-1">Sub-100ms Ingest</span>
+                <p className="caption text-ink-secondary leading-relaxed">Cached index renders state changes offline instantly, saving changes to PostgreSQL in the background.</p>
               </div>
 
               <div className="p-4 rounded-xl border border-hairline bg-surface-1 shadow-sm">
-                <span className="text-sm font-semibold text-ink block mb-1 font-sans">Home Row Shortcuts</span>
-                <p className="text-sm text-ink-secondary leading-relaxed font-sans">Archive, delete, draft, and query search structures with fast key triggers built natively.</p>
+                <span className="caption font-semibold text-ink block mb-1">Home Row Shortcuts</span>
+                <p className="caption text-ink-secondary leading-relaxed">Archive, delete, draft, and query search structures with fast key triggers built natively.</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1708,59 +1949,83 @@ function SpeedLayer({
  */
 function FutureOfWork() {
   return (
-    <section className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>System architecture</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">An operating system for work</h2>
-          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3">
             An underlying architecture compiled for local speed, unified data consistency, and advanced LLM tool executions.
           </p>
         </div>
 
         {/* Bento Grid Architecture */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+        <motion.div 
+          variants={bentoContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-120px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
+        >
           {/* Box 1 */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <motion.div 
+            variants={bentoItem}
+            whileHover={{ y: -6, transition: { duration: 0.2, ease: EASE_OUT } }}
+            className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm cursor-pointer"
+          >
             <div>
               <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
-                <Database className="w-4 h-4 text-ink" />
+                <ServerIcon className="w-4 h-4 text-ink" />
               </div>
               <h3 className="text-base font-semibold text-ink mb-2">Local-First Cache Index</h3>
-              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
+              <p className="caption text-ink-secondary leading-relaxed">
                 Synchronized PostgreSQL database replicating critical Gmail message headers and Google Calendar schedules. Queries retrieve instantly without direct API hops.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Box 2 */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <motion.div 
+            variants={bentoItem}
+            whileHover={{ y: -6, transition: { duration: 0.2, ease: EASE_OUT } }}
+            className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm cursor-pointer"
+          >
             <div>
               <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
-                <Globe className="w-4 h-4 text-ink" />
+                <GlobeAltIcon className="w-4 h-4 text-ink" />
               </div>
               <h3 className="text-base font-semibold text-ink mb-2">Corsair Sync Webhooks</h3>
-              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
+              <p className="caption text-ink-secondary leading-relaxed">
                 Webhook streams coordinate and sync remote alterations in background workers, keeping local datasets always aligned and resolving conflicts in real-time.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Box 3 */}
-          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <motion.div 
+            variants={bentoItem}
+            whileHover={{ y: -6, transition: { duration: 0.2, ease: EASE_OUT } }}
+            className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm cursor-pointer"
+          >
             <div>
               <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
-                <Search className="w-4 h-4 text-ink" />
+                <MagnifyingGlassIcon className="w-4 h-4 text-ink" />
               </div>
               <h3 className="text-base font-semibold text-ink mb-2">pgvector Semantic Search</h3>
-              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
+              <p className="caption text-ink-secondary leading-relaxed">
                 Vector embeddings computed using Google's text-embedding-004 allows users to perform semantic search, matching user intents rather than simple keywords.
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1769,35 +2034,49 @@ function FutureOfWork() {
  */
 function OnboardingSection() {
   return (
-    <section className="px-6 py-24 border-b border-hairline bg-transparent">
+    <motion.section 
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.8, ease: EASE_EXPO }}
+      className="px-6 py-24 border-b border-hairline bg-transparent"
+    >
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Guided Setup</SectionEyebrow>
           <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Connect in 3 minutes</h2>
-          <p className="body-md text-ink-secondary mt-3 font-sans">
+          <p className="body-md text-ink-secondary mt-3">
             Secure, sandboxed local environment initialized immediately upon sign up.
           </p>
         </div>
 
-        <div className="space-y-4 text-left">
+        <motion.div 
+          variants={bentoContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-120px" }}
+          className="space-y-4 text-left"
+        >
           {ONBOARDING_STEPS.map((step, idx) => (
-            <div
+            <motion.div
               key={step.step}
+              variants={bentoItem}
+              whileHover={{ x: 4 }}
               className="flex items-start gap-4 p-5 rounded-xl border border-hairline bg-surface-1 shadow-sm"
             >
-              <span className="text-lg font-bold tabular-nums text-ink-muted w-8 font-sans">
+              <span className="text-lg font-bold tabular-nums text-ink-muted w-8 font-mono">
                 {step.step}
               </span>
               <div className="flex-1 text-left">
-                <h3 className="text-base font-semibold mb-1 text-ink font-sans">{step.title}</h3>
-                <p className="text-sm text-ink-secondary leading-relaxed font-sans">{step.desc}</p>
+                <h3 className="text-base font-semibold mb-1 text-ink">{step.title}</h3>
+                <p className="caption text-ink-secondary leading-relaxed">{step.desc}</p>
               </div>
-              <CheckCircle2 className="w-4 h-4 text-ink flex-shrink-0 mt-0.5" />
-            </div>
+              <CheckCircleIcon className="w-4 h-4 text-ink flex-shrink-0 mt-0.5" />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1806,23 +2085,36 @@ function OnboardingSection() {
  */
 function ActionCenterSection() {
   return (
-    <section className="px-6 py-24 bg-transparent">
+    <motion.section 
+      initial={{ opacity: 0, scale: 0.98 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-120px" }}
+      transition={{ duration: 0.9, ease: EASE_EXPO }}
+      className="px-6 py-24 bg-transparent"
+    >
       <div 
         className="max-w-2xl mx-auto text-center p-12 rounded-xl border border-hairline bg-surface-1 w-full shadow-sm"
       >
         <div className="flex flex-col items-center gap-6 mb-8 w-full">
           <SectionEyebrow>Get Started</SectionEyebrow>
           <h2 className="display-2 text-ink text-balance tracking-[-0.04em] font-semibold" style={{ maxWidth: "38rem" }}>Reclaim your inbox attention</h2>
-          <p className="body-md text-ink-secondary text-balance font-sans" style={{ maxWidth: "32rem" }}>
+          <p className="body-md text-ink-secondary text-balance" style={{ maxWidth: "32rem" }}>
             Experience local inbox execution speed. Join the beta and coordinate workflows with natural AI commands.
           </p>
         </div>
-        <Link href="/sign-up" className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2">
+        <MotionLink 
+          href="/sign-up" 
+          whileHover="hover"
+          whileTap={{ scale: 0.98 }}
+          className="btn-lovable-primary px-6 py-3 text-sm font-medium rounded-md inline-flex items-center gap-2"
+        >
           Connect Workspace Free
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+          <motion.span variants={arrowVariants} className="flex items-center justify-center">
+            <ArrowRightIcon className="w-4 h-4" />
+          </motion.span>
+        </MotionLink>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -1843,7 +2135,7 @@ function Footer() {
         </div>
         <div>
           <h4 className="text-white font-semibold mb-4 text-xs">Product</h4>
-          <ul className="space-y-2 text-[#71717a] text-[11px] font-sans">
+          <ul className="space-y-2 text-[#71717a] text-[11px] font-inter">
             <li><a href="#transform" className="hover:text-white transition-colors">Compare Flows</a></li>
             <li><a href="#commands" className="hover:text-white transition-colors">AI CommandCenter</a></li>
             <li><a href="#workspace" className="hover:text-white transition-colors">Workspace Views</a></li>
@@ -1851,7 +2143,7 @@ function Footer() {
         </div>
         <div>
           <h4 className="text-white font-semibold mb-4 text-xs">System</h4>
-          <ul className="space-y-2 text-[#71717a] text-[11px] font-sans">
+          <ul className="space-y-2 text-[#71717a] text-[11px] font-inter">
             <li>Local Postgres Database</li>
             <li>Clerk Tenant Isolation</li>
             <li>Gemini Tool Calling</li>
@@ -1859,14 +2151,14 @@ function Footer() {
         </div>
         <div>
           <h4 className="text-white font-semibold mb-4 text-xs">Security</h4>
-          <ul className="space-y-2 text-[#71717a] text-[11px] font-sans">
+          <ul className="space-y-2 text-[#71717a] text-[11px] font-inter">
             <li>OAuth Sandboxed</li>
             <li>End-to-End Encryption</li>
             <li>GDPR Compliant</li>
           </ul>
         </div>
       </div>
-      <div className="max-w-5xl mx-auto pt-8 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4 text-[#71717a] text-[11px] font-sans">
+      <div className="max-w-5xl mx-auto pt-8 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4 text-[#71717a] text-[11px] font-inter">
         <p>© 2026 Syncar. All rights reserved.</p>
         <p>Next.js 16 · Corsair Dev Engine · Gemini Flash · Clerk Auth · pgvector</p>
       </div>
