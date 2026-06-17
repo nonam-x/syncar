@@ -714,32 +714,72 @@ input.border-b.borderless-focus:focus {
 }
 
 /* Clerk Authentication overrides */
+/* Clerk Authentication overrides */
+.cl-rootBox {
+  font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
 .cl-card {
   background: var(--surface-1) !important;
   border: 1px solid var(--hairline) !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01) !important;
+  border-radius: 16px !important;
+  padding: 24px 20px !important;
+  width: 100% !important;
+  max-width: 360px !important;
+}
+
+.cl-header {
+  margin-bottom: 16px !important;
 }
 
 .cl-headerTitle {
+  font-family: var(--font-plus-jakarta-sans), "Inter", sans-serif !important;
   color: var(--ink) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+  font-size: 20px !important;
+  line-height: 1.25 !important;
 }
 
 .cl-headerSubtitle {
   color: var(--ink-secondary) !important;
+  font-family: var(--font-geist), sans-serif !important;
+  font-size: 13px !important;
+  margin-top: 4px !important;
+}
+
+.cl-socialButtons {
+  gap: 8px !important;
+  margin-bottom: 14px !important;
 }
 
 .cl-socialButtonsBlockButton {
   background: var(--surface-2) !important;
   border: 1px solid var(--hairline) !important;
   color: var(--ink) !important;
+  border-radius: 8px !important;
+  height: 38px !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  transition: all 150ms ease !important;
 }
 
 .cl-socialButtonsBlockButton:hover {
   background: var(--surface-3) !important;
+  border-color: var(--hairline-strong) !important;
 }
 
 .cl-socialButtonsBlockButtonText {
   color: var(--ink) !important;
+  font-weight: 500 !important;
+}
+
+.cl-socialButtonsBlockButtonArrow {
+  color: var(--ink-secondary) !important;
 }
 
 .cl-dividerLine {
@@ -748,37 +788,171 @@ input.border-b.borderless-focus:focus {
 
 .cl-dividerText {
   color: var(--ink-muted) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.cl-form {
+  gap: 12px !important;
 }
 
 .cl-formFieldLabel {
   color: var(--ink) !important;
+  font-weight: 500 !important;
+  font-size: 12.5px !important;
+  margin-bottom: 6px !important;
 }
 
 .cl-formFieldInput {
   background: var(--surface-2) !important;
   border: 1px solid var(--hairline) !important;
   color: var(--ink) !important;
+  border-radius: 8px !important;
+  height: 38px !important;
+  padding: 8px 12px !important;
+  font-size: 13.5px !important;
+  transition: all 150ms ease !important;
 }
 
-.cl-formFieldInput::placeholder {
-  color: var(--ink-secondary) !important;
+.cl-formFieldInput:focus {
+  border-color: var(--hairline-strong) !important;
+  background: var(--surface-1) !important;
+  box-shadow: 0 0 0 2px rgba(28, 28, 28, 0.05) !important;
+  outline: none !important;
+}
+
+.cl-formFieldInput[type="checkbox"] {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 4px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.cl-formFieldInput[type="checkbox"]:checked {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.cl-formFieldInputError {
+  color: var(--danger) !important;
+  font-size: 11.5px !important;
+  margin-top: 4px !important;
 }
 
 .cl-footerActionText {
   color: var(--ink-secondary) !important;
+  font-size: 12.5px !important;
 }
 
 .cl-footerActionLink {
   color: var(--accent-olive) !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+  transition: opacity 150ms ease !important;
+}
+
+.cl-footerActionLink:hover {
+  opacity: 0.8 !important;
 }
 
 .cl-formButtonPrimary {
   background: var(--primary) !important;
-  color: var(--ink) !important;
+  color: var(--canvas) !important;
+  border-radius: 8px !important;
+  height: 38px !important;
+  font-weight: 600 !important;
+  font-size: 13.5px !important;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 0.5px 0px 0px inset, rgba(0, 0, 0, 0.1) 0px 0px 0px 0.5px inset, rgba(0, 0, 0, 0.04) 0px 1px 2px 0px !important;
+  transition: opacity 150ms ease !important;
 }
 
 .cl-formButtonPrimary:hover {
-  opacity: 0.9;
+  opacity: 0.9 !important;
+}
+
+.cl-formButtonPrimary:active {
+  transform: scale(0.98) !important;
+}
+
+.cl-identityPreview {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+}
+
+.cl-identityPreviewText {
+  color: var(--ink) !important;
+  font-size: 13px !important;
+}
+
+.cl-identityPreviewEditButton {
+  color: var(--accent-olive) !important;
+}
+
+.cl-formHeaderTitle {
+  color: var(--ink) !important;
+}
+
+.cl-formHeaderSubtitle {
+  color: var(--ink-secondary) !important;
+}
+
+/* User Button Popover adjustments */
+.cl-userButtonPopoverCard {
+  background: var(--surface-1) !important;
+  border: 1px solid var(--hairline) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+}
+
+.cl-userButtonPopoverActions {
+  gap: 4px !important;
+}
+
+.cl-userButtonPopoverActionButton {
+  color: var(--ink) !important;
+  border-radius: 6px !important;
+  transition: all 150ms ease !important;
+}
+
+.cl-userButtonPopoverActionButton:hover {
+  background: var(--surface-2) !important;
+}
+
+.cl-userButtonPopoverActionButtonIcon {
+  color: var(--ink-secondary) !important;
+}
+
+.cl-userButtonPopoverFooter {
+  border-top: 1px solid var(--hairline) !important;
+  background: var(--surface-2) !important;
+}
+
+.cl-footer {
+  background: var(--surface-2) !important;
+  border-top: 1px solid var(--hairline) !important;
+  margin-top: 0 !important;
+  border-bottom-left-radius: 16px !important;
+  border-bottom-right-radius: 16px !important;
+}
+
+.cl-footerAction {
+  background: transparent !important;
+}
+
+/* Hide Clerk branding watermarks clean and natively without breaking terms */
+.cl-internal-b389zp, .cl-internal-157h25a {
+  opacity: 0.45 !important;
+  filter: grayscale(100%) !important;
+  transition: opacity 150ms ease !important;
+}
+
+.cl-internal-b389zp:hover, .cl-internal-157h25a:hover {
+  opacity: 0.8 !important;
 }
 
 /* ============================================================================
@@ -861,3 +1035,197 @@ input.border-b.borderless-focus:focus {
   animation: shimmer 1.4s infinite;
   border-radius: var(--rounded-md);
 }
+
+/* ============================================================================
+   8. LANDING PAGE STYLE SPECIFICATION (Lovable + Cal.com Theme)
+   ============================================================================ */
+.landing-page {
+  /* Colors */
+  --canvas:                     #f7f4ed; /* Creamy parchment background */
+  --surface-1:                  #ffffff; /* Card surface - white */
+  --surface-2:                  #f2eee5; /* Lovable Charcoal 4% or soft tint hover */
+  --surface-3:                  #eceae4; /* Divider/passive border */
+  --surface-4:                  #e5e3dd;
+  
+  --primary:                    #1c1c1c; /* Charcoal primary CTA */
+  --primary-deep:               #000000;
+  --accent-olive:               #1c1c1c;
+  --accent-olive-light:         rgba(28, 28, 28, 0.82);
+  
+  --ink:                        #1c1c1c; /* Charcoal text */
+  --ink-secondary:              rgba(28, 28, 28, 0.82); /* Body copy */
+  --ink-muted:                  #5f5f5d; /* Secondary text */
+  --ink-faint:                  rgba(28, 28, 28, 0.4);
+  
+  --hairline:                   #eceae4; /* Lovable passive border line */
+  --hairline-strong:            rgba(28, 28, 28, 0.4); /* Interactive border */
+
+  /* General typography configuration */
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--canvas) !important;
+  color: var(--ink) !important;
+}
+
+.landing-page h1,
+.landing-page h2,
+.landing-page h3,
+.landing-page h4,
+.landing-page h5,
+.landing-page h6,
+.landing-page .display-font {
+  font-family: var(--font-plus-jakarta-sans), "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+}
+
+.landing-page h1 {
+  letter-spacing: -0.04em !important;
+  line-height: 1.05 !important;
+}
+
+.landing-page h2 {
+  letter-spacing: -0.03em !important;
+  line-height: 1.1 !important;
+}
+
+.landing-page h3 {
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+}
+
+/* Inset Shadow Buttons (Lovable) */
+.landing-page .btn-lovable-primary {
+  background-color: #1c1c1c !important;
+  color: #fcfbf8 !important;
+  box-shadow: rgba(255,255,255,0.2) 0px 0.5px 0px 0px inset, rgba(0,0,0,0.2) 0px 0px 0px 0.5px inset, rgba(0,0,0,0.05) 0px 1px 2px 0px !important;
+  border: none !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: opacity 150ms ease;
+}
+
+.landing-page .btn-lovable-primary:hover {
+  opacity: 0.9 !important;
+}
+
+.landing-page .btn-lovable-primary:active {
+  transform: scale(0.97) !important;
+}
+
+/* Outline Buttons (Lovable) */
+.landing-page .btn-lovable-outline {
+  background-color: transparent !important;
+  color: #1c1c1c !important;
+  border: 1px solid rgba(28,28,28,0.4) !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: background-color 150ms ease;
+}
+
+.landing-page .btn-lovable-outline:hover {
+  background-color: rgba(28, 28, 28, 0.04) !important;
+}
+
+.landing-page .btn-lovable-outline:active {
+  transform: scale(0.97) !important;
+}
+
+/* Lovable Pill Radii */
+.landing-page .pill-radius {
+  border-radius: 9999px !important;
+}
+
+/* Focus Glow (Lovable) */
+.landing-page .focus-lovable-glow:focus,
+.landing-page .focus-lovable-glow:focus-within {
+  box-shadow: rgba(0,0,0,0.06) 0px 8px 24px !important;
+  outline: none !important;
+}
+
+/* ============================================================================
+   9. LANDING PAGE DARK MODE SPECIFICATION
+   ============================================================================ */
+.dark .landing-page {
+  /* Colors - Hybrid-Elite-Dark theme tokens */
+  --canvas:                     #010102; /* Pure deep near-black backdrop */
+  --surface-1:                  #0f1011; /* Level 1 card/panel container */
+  --surface-2:                  #141516; /* Level 2 hover state */
+  --surface-3:                  #18191a; /* Level 3 navigation chrome */
+  --surface-4:                  #191a1b; /* Level 4 deep modal */
+  
+  --primary:                    #fcfbf8; /* High-contrast white-ish primary */
+  --primary-deep:               #ffffff;
+  --accent-olive:               #7A8266;
+  --accent-olive-light:         #9A9D90;
+  
+  --ink:                        #f7f8f8; /* White text */
+  --ink-secondary:              #bcbac9; /* Secondary body text */
+  --ink-muted:                  #73706d; /* Muted stone-gray caption text */
+  --ink-faint:                  #3f3a52;
+  
+  --hairline:                   #23252a; /* Dark divider line */
+  --hairline-strong:            #34343a;
+  
+  background-color: var(--canvas) !important;
+  color: var(--ink) !important;
+}
+
+/* Hardcoded Tailwind color classes override for dark mode */
+.dark .landing-page .bg-white,
+.dark .landing-page .bg-white\/90,
+.dark .landing-page .bg-white\/95 {
+  background-color: var(--surface-1) !important;
+}
+
+.dark .landing-page .border-\[\#eceae4\],
+.dark .landing-page .border-red-200 {
+  border-color: var(--hairline) !important;
+}
+
+.dark .landing-page .text-\[\#1c1c1c\],
+.dark .landing-page .text-\[\#1c1c1c\]\/70,
+.dark .landing-page .text-\[\#1c1c1c\]\/80 {
+  color: var(--ink) !important;
+}
+
+.dark .landing-page .text-\[\#5f5f5d\] {
+  color: var(--ink-secondary) !important;
+}
+
+.dark .landing-page .bg-\[\#fafafa\],
+.dark .landing-page .bg-\[\#f2eee5\],
+.dark .landing-page .bg-\[\#f7f4ed\] {
+  background-color: var(--surface-2) !important;
+}
+
+.dark .landing-page .hover\:bg-\[\#fafafa\]:hover,
+.dark .landing-page .hover\:bg-\[\#f2eee5\]:hover {
+  background-color: var(--surface-3) !important;
+}
+
+.dark .landing-page .bg-\[\#1c1c1c\]\/5 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .landing-page .border-\[\#1c1c1c\]\/15 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Dark mode buttons styling */
+.dark .landing-page .btn-lovable-primary {
+  background-color: var(--primary) !important;
+  color: var(--canvas) !important;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px !important;
+}
+
+.dark .landing-page .btn-lovable-outline {
+  color: var(--ink) !important;
+  border-color: var(--hairline-strong) !important;
+}
+
+.dark .landing-page .btn-lovable-outline:hover {
+  background-color: var(--surface-2) !important;
+}
+

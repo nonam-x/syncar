@@ -26,6 +26,8 @@
 
 # md
 
+.md
+
 AGENTS.md
 ai-context.md
 CONTEXT.md
@@ -43,6 +45,8 @@ yarn-error.log*
 .env*
 
 .env
+
+.env.local
 
 # vercel
 .vercel

@@ -15,6 +15,8 @@ export function EmailComposer() {
   const [toFocused, setToFocused] = useState(false);
   const [subjectFocused, setSubjectFocused] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+  // Protects against React Strict Mode double-render triggering multiple concurrent draft API calls
+  const aiGeneratedRef = useRef<string | null>(null);
 
   const sendEmail = useSendEmail();
   const aiChat = useAIChat();
@@ -40,8 +42,12 @@ export function EmailComposer() {
       setTo(composerPreset.to || "");
       setSubject(composerPreset.subject || "");
       if (composerPreset.body === "AI_GENERATING") {
-        setBody("Generating AI response...");
-        generateAIDraft(composerPreset.to || "", composerPreset.subject || "");
+        const presetKey = `${composerPreset.to || ""}_${composerPreset.subject || ""}`;
+        if (aiGeneratedRef.current !== presetKey) {
+          aiGeneratedRef.current = presetKey;
+          setBody("Generating AI response...");
+          generateAIDraft(composerPreset.to || "", composerPreset.subject || "");
+        }
       } else {
         setBody(composerPreset.body || "");
       }
@@ -49,6 +55,9 @@ export function EmailComposer() {
       setTo("");
       setSubject("");
       setBody("");
+      aiGeneratedRef.current = null;
+    } else if (!composerOpen) {
+      aiGeneratedRef.current = null;
     }
   }, [composerOpen, composerPreset]);
 

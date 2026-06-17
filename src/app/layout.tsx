@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "./providers";
-import { Geist, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Geist, Hanken_Grotesk, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const geist = Geist({
@@ -12,6 +12,11 @@ const geist = Geist({
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
   variable: "--font-hanken-grotesk",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta-sans",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -55,7 +60,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`h-full ${geist.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable}`}>
+      <html lang="en" className={`h-full ${geist.variable} ${hankenGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable}`}>
         <body className="h-full antialiased">
           <Providers>{children}</Providers>
         </body>

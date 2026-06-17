@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TopNav } from "@/components/layout/TopNav";
 import { ChatMessage } from "@/components/ai/ChatMessage";
 import { ChatInput } from "@/components/ai/ChatInput";
-import { useAIChat } from "@/lib/hooks/api";
-import { Plus, Bot, Zap, MessageSquare } from "lucide-react";
+import { Plus, Bot } from "lucide-react";
 import { formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
@@ -18,6 +17,7 @@ interface LocalChatMessage {
   content: string;
   toolsUsed?: string[];
   createdAt: Date;
+  status?: "pending" | "completed" | "failed" | "cancelled";
 }
 
 interface LocalConversation {
@@ -32,10 +32,96 @@ export default function AIPage() {
   const { user } = useUser();
   const [conversations, setConversations] = useState<LocalConversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
-  const aiChat = useAIChat();
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConv = conversations.find((c) => c.id === activeConvId) ?? null;
+
+  // 1. Load conversations from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("syncar_ai_conversations");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const mapped = parsed.map((c: any) => ({
+          ...c,
+          updatedAt: new Date(c.updatedAt),
+          messages: c.messages.map((m: any) => ({
+            ...m,
+            createdAt: new Date(m.createdAt),
+          })),
+        }));
+        setConversations(mapped);
+        if (mapped.length > 0) {
+          setActiveConvId(mapped[0].id);
+        }
+      } catch (err) {
+        console.error("Failed to parse saved conversations:", err);
+      }
+    }
+  }, []);
+
+  // 2. Save conversations to localStorage on change
+  useEffect(() => {
+    if (conversations.length > 0) {
+      localStorage.setItem("syncar_ai_conversations", JSON.stringify(conversations));
+    }
+  }, [conversations]);
+
+  // 3. Poll for pending messages
+  useEffect(() => {
+    const pendingMsg = activeConv?.messages.find((m) => m.status === "pending");
+    if (!pendingMsg || !activeConv.serverConvId) return;
+
+    const conversationId = activeConv.serverConvId;
+    const messageId = pendingMsg.id;
+
+    setIsLoading(true);
+
+    let intervalId = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/ai/chat?conversationId=${conversationId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const serverMessages = data.messages || [];
+
+        // Find the matching server message
+        const matchingServerMsg = serverMessages.find((m: any) => m.id === messageId);
+        if (matchingServerMsg) {
+          setConversations((prev) =>
+            prev.map((c) => {
+              if (c.serverConvId !== conversationId) return c;
+
+              return {
+                ...c,
+                messages: c.messages.map((m) => {
+                  if (m.id !== messageId) return m;
+                  return {
+                    ...m,
+                    content: matchingServerMsg.content || "Syncar is thinking...",
+                    status: matchingServerMsg.status,
+                    toolsUsed: matchingServerMsg.toolCalls ? matchingServerMsg.toolCalls.map((t: any) => t.name) : m.toolsUsed,
+                  };
+                }),
+                updatedAt: new Date(),
+              };
+            })
+          );
+
+          if (matchingServerMsg.status !== "pending") {
+            setIsLoading(false);
+            clearInterval(intervalId);
+          }
+        }
+      } catch (err) {
+        console.error("Error polling message status:", err);
+      }
+    }, 1500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [activeConv?.messages, activeConv?.serverConvId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -52,77 +138,133 @@ export default function AIPage() {
     setActiveConvId(newConv.id);
   };
 
-  const handleSend = async (message: string) => {
-    if (!activeConvId) {
-      handleNewConversation();
-    }
+  const handleCancel = async (messageId: string) => {
+    try {
+      const res = await fetch("/api/ai/chat", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messageId }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to cancel request");
+      }
 
-    const targetId = activeConvId ?? `conv_${Date.now()}`;
+      setConversations((prev) =>
+        prev.map((c) => {
+          return {
+            ...c,
+            messages: c.messages.map((m) => {
+              if (m.id !== messageId) return m;
+              return {
+                ...m,
+                status: "cancelled",
+                content: "⚠️ AI Request paused and cancelled by user.",
+              };
+            }),
+            updatedAt: new Date(),
+          };
+        })
+      );
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Cancellation failed:", err);
+    }
+  };
+
+  const handleSend = async (message: string) => {
+    if (isLoading) return;
+    if (!message || !message.trim()) return;
+
+    let targetId = activeConvId;
+
+    if (!targetId) {
+      targetId = `conv_${Date.now()}`;
+      const newConv: LocalConversation = {
+        id: targetId,
+        title: message.slice(0, 40) + (message.length > 40 ? "..." : ""),
+        messages: [],
+        updatedAt: new Date(),
+      };
+      setConversations((prev) => [newConv, ...prev]);
+      setActiveConvId(targetId);
+    }
 
     const userMsg: LocalChatMessage = {
       id: `m_${Date.now()}`,
       role: "user",
       content: message,
       createdAt: new Date(),
+      status: "completed",
     };
 
     setConversations((prev) =>
       prev.map((c) =>
         c.id === targetId
           ? {
-            ...c,
-            messages: [...c.messages, userMsg],
-            title: c.messages.length === 0 ? message.slice(0, 40) + (message.length > 40 ? "..." : "") : c.title,
-            updatedAt: new Date(),
-          }
+              ...c,
+              messages: [...c.messages, userMsg],
+              title: c.messages.length === 0 ? message.slice(0, 40) + (message.length > 40 ? "..." : "") : c.title,
+              updatedAt: new Date(),
+            }
           : c
       )
     );
 
-    const activeConvForSend = conversations.find((c) => c.id === targetId);
+    setIsLoading(true);
 
-    aiChat.mutate(
-      { message, conversationId: activeConvForSend?.serverConvId },
-      {
-        onSuccess: (data) => {
-          const assistantMsg: LocalChatMessage = {
-            id: `m_${Date.now() + 1}`,
-            role: "assistant",
-            content: data.response,
-            toolsUsed: data.toolsUsed,
-            createdAt: new Date(),
-          };
+    try {
+      const activeConvForSend = conversations.find((c) => c.id === targetId);
 
-          setConversations((prev) =>
-            prev.map((c) =>
-              c.id === targetId
-                ? {
-                  ...c,
-                  messages: [...c.messages, assistantMsg],
-                  updatedAt: new Date(),
-                  serverConvId: data.conversationId,
-                }
-                : c
-            )
-          );
-        },
-        onError: (err) => {
-          const errorMsg: LocalChatMessage = {
-            id: `m_${Date.now() + 1}`,
-            role: "assistant",
-            content: `Sorry, I encountered an error: ${(err as Error).message}`,
-            createdAt: new Date(),
-          };
-          setConversations((prev) =>
-            prev.map((c) =>
-              c.id === targetId
-                ? { ...c, messages: [...c.messages, errorMsg], updatedAt: new Date() }
-                : c
-            )
-          );
-        },
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          conversationId: activeConvForSend?.serverConvId,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit chat message");
       }
-    );
+
+      const { conversationId: serverId, assistantMessageId } = data;
+
+      const assistantMsg: LocalChatMessage = {
+        id: assistantMessageId,
+        role: "assistant",
+        content: "🔍 Analyzing your request and workspace context...",
+        createdAt: new Date(),
+        status: "pending",
+      };
+
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === targetId
+            ? {
+                ...c,
+                messages: [...c.messages, assistantMsg],
+                updatedAt: new Date(),
+                serverConvId: serverId,
+              }
+            : c
+        )
+      );
+    } catch (err) {
+      const errorMsg: LocalChatMessage = {
+        id: `m_${Date.now() + 1}`,
+        role: "assistant",
+        content: `Sorry, I encountered an error: ${(err as Error).message}`,
+        createdAt: new Date(),
+        status: "failed",
+      };
+      setConversations((prev) =>
+        prev.map((c) => (c.id === targetId ? { ...c, messages: [...c.messages, errorMsg], updatedAt: new Date() } : c))
+      );
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -234,44 +376,14 @@ export default function AIPage() {
               /* Messages */
               <div className="px-6 py-5">
                 <AnimatePresence initial={false}>
-                  {activeConv.messages.map((msg) => (
-                    <ChatMessage key={msg.id} message={msg} />
+                  {activeConv.messages.map((msg, index) => (
+                    <ChatMessage
+                      key={msg.id}
+                      message={msg}
+                      onCancel={handleCancel}
+                      isLatest={index === activeConv.messages.length - 1}
+                    />
                   ))}
-                </AnimatePresence>
-
-                {/* Loading indicator */}
-                <AnimatePresence>
-                  {aiChat.isPending && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="flex gap-3 mb-5"
-                    >
-                      <div
-                        className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ background: "var(--surface-3)", border: "1px solid var(--border)" }}
-                      >
-                        <Bot className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
-                      </div>
-                      <div
-                        className="px-3.5 py-2.5 rounded-2xl rounded-tl-sm"
-                        style={{ background: "var(--surface-2)", border: "1px solid var(--border)" }}
-                      >
-                        <div className="flex gap-1">
-                          {[0, 1, 2].map((i) => (
-                            <motion.div
-                              key={i}
-                              animate={{ scale: [1, 1.3, 1] }}
-                              transition={{ delay: i * 0.15, duration: 0.6, repeat: Infinity }}
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{ background: "var(--foreground-muted)" }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
                 </AnimatePresence>
                 <div ref={messagesEndRef} />
               </div>
@@ -285,7 +397,7 @@ export default function AIPage() {
           >
             <ChatInput
               onSend={handleSend}
-              isLoading={aiChat.isPending}
+              isLoading={isLoading}
               placeholder="Ask your AI assistant anything..."
             />
           </div>
