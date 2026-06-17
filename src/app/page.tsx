@@ -188,14 +188,14 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 32, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 32, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border border-[#eceae4] shadow-sm bg-white"
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg border border-hairline shadow-sm bg-surface-1"
           >
-            <Zap className="w-4 h-4 text-[#1c1c1c] animate-pulse" />
+            <Zap className="w-4 h-4 text-ink animate-pulse" />
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-[#1c1c1c]">{toast.message}</span>
+              <span className="text-xs font-semibold text-ink">{toast.message}</span>
               {toast.shortcut && (
-                <span className="text-xs text-[#1c1c1c]/60 font-sans">
-                  Shortcut: <kbd className="bg-[#f2eee5] px-1 py-0.5 rounded text-[#1c1c1c] font-mono font-bold">{toast.shortcut}</kbd>
+                <span className="text-xs text-ink-muted font-sans">
+                  Shortcut: <kbd className="bg-surface-3 px-1 py-0.5 rounded text-ink font-mono font-bold">{toast.shortcut}</kbd>
                 </span>
               )}
             </div>
@@ -247,7 +247,7 @@ export default function LandingPage() {
 
 function SectionEyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#1c1c1c]/5 text-[#1c1c1c]/80 border border-[#1c1c1c]/10 mb-4 font-sans">
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-ink/5 text-ink-secondary border border-ink/10 mb-4 font-sans">
       {children}
     </span>
   );
@@ -276,7 +276,7 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
       <nav 
         className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${
           scrolled 
-            ? "bg-white/80 dark:bg-[#010102]/80 backdrop-blur-md border-b border-[#eceae4]/80 dark:border-[#23252a]/80 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)]" 
+            ? "bg-canvas/80 backdrop-blur-md border-b border-hairline/80 shadow-[0_2px_12px_-3px_rgba(0,0,0,0.04)]" 
             : "bg-transparent"
         }`}
       >
@@ -288,13 +288,13 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
             </div>
 
             {/* Column 2: Center navigation links */}
-            <div className="hidden lg:flex justify-center items-center gap-6 text-sm font-medium text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70">
-              <a href="#transform" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">Compare</a>
-              <a href="#commands" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">Commands</a>
-              <a href="#clarity" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">AI Filter</a>
-              <a href="#intelligence" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">Calendar</a>
-              <a href="#workspace" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">Workspace</a>
-              <a href="#speed" className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap">Speed Layer</a>
+            <div className="hidden lg:flex justify-center items-center gap-6 text-sm font-medium text-ink-secondary">
+              <a href="#transform" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">Compare</a>
+              <a href="#commands" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">Commands</a>
+              <a href="#clarity" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">AI Filter</a>
+              <a href="#intelligence" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">Calendar</a>
+              <a href="#workspace" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">Workspace</a>
+              <a href="#speed" className="hover:text-ink transition-colors duration-200 whitespace-nowrap">Speed Layer</a>
             </div>
 
             {/* Column 3: Actions */}
@@ -302,15 +302,15 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
               <div className="hidden sm:flex items-center gap-2">
                 {!isLoaded && (
                   <div className="animate-pulse flex items-center gap-2">
-                    <div className="h-8 w-14 bg-[#1c1c1c]/5 dark:bg-[#f7f8f8]/10 rounded" />
-                    <div className="h-9 w-24 bg-[#1c1c1c]/10 dark:bg-[#f7f8f8]/20 rounded-md" />
+                    <div className="h-8 w-14 bg-ink/5 rounded" />
+                    <div className="h-9 w-24 bg-ink/10 rounded-md" />
                   </div>
                 )}
                 {isLoaded && !isSignedIn && (
                   <>
                     <Link
                       href="/sign-in"
-                      className="text-sm font-medium px-3 py-1.5 rounded text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70 hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors duration-200 whitespace-nowrap"
+                      className="text-sm font-medium px-3 py-1.5 rounded text-ink-secondary hover:text-ink transition-colors duration-200 whitespace-nowrap"
                     >
                       Sign in
                     </Link>
@@ -334,7 +334,7 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
 
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-md border border-[#eceae4] dark:border-[#23252a] hover:bg-[#fafafa] dark:hover:bg-[#141516] hover:border-[#1c1c1c]/25 dark:hover:border-[#f7f8f8]/25 transition-all text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70 hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8]"
+                className="p-2 rounded-md border border-hairline hover:bg-surface-1 hover:border-hairline-strong transition-all text-ink-secondary hover:text-ink"
                 title="Toggle Theme"
               >
                 {mounted ? (
@@ -347,7 +347,7 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileMenuOpen(prev => !prev)}
-                className="lg:hidden p-2 rounded-md border border-[#eceae4] dark:border-[#23252a] hover:bg-[#fafafa] dark:hover:bg-[#141516] transition-all text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70 hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8]"
+                className="lg:hidden p-2 rounded-md border border-hairline hover:bg-surface-1 transition-all text-ink-secondary hover:text-ink"
                 aria-label="Toggle Menu"
               >
                 {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -365,59 +365,59 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15 }}
-            className="fixed top-16 left-0 right-0 z-40 bg-white dark:bg-[#010102] border-b border-[#eceae4] dark:border-[#23252a] shadow-lg lg:hidden p-6 flex flex-col gap-4 text-left"
+            className="fixed top-16 left-0 right-0 z-40 bg-canvas border-b border-hairline shadow-lg lg:hidden p-6 flex flex-col gap-4 text-left"
           >
-            <div className="flex flex-col gap-3.5 text-sm font-medium text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70">
+            <div className="flex flex-col gap-3.5 text-sm font-medium text-ink-secondary">
               <a 
                 href="#transform" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5 border-b border-gray-50 dark:border-[#23252a]"
+                className="hover:text-ink transition-colors py-1.5 border-b border-hairline"
               >
                 Compare
               </a>
               <a 
                 href="#commands" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5 border-b border-gray-50 dark:border-[#23252a]"
+                className="hover:text-ink transition-colors py-1.5 border-b border-hairline"
               >
                 Commands
               </a>
               <a 
                 href="#clarity" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5 border-b border-gray-50 dark:border-[#23252a]"
+                className="hover:text-ink transition-colors py-1.5 border-b border-hairline"
               >
                 AI Filter
               </a>
               <a 
                 href="#intelligence" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5 border-b border-gray-50 dark:border-[#23252a]"
+                className="hover:text-ink transition-colors py-1.5 border-b border-hairline"
               >
                 Calendar
               </a>
               <a 
                 href="#workspace" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5 border-b border-gray-50 dark:border-[#23252a]"
+                className="hover:text-ink transition-colors py-1.5 border-b border-hairline"
               >
                 Workspace
               </a>
               <a 
                 href="#speed" 
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8] transition-colors py-1.5"
+                className="hover:text-ink transition-colors py-1.5"
               >
                 Speed Layer
               </a>
             </div>
 
-            <div className="flex flex-col gap-2 pt-2 border-t border-[#eceae4] dark:border-[#23252a]">
+            <div className="flex flex-col gap-2 pt-2 border-t border-hairline">
               {isLoaded && !isSignedIn && (
                 <>
                   <Link
                     href="/sign-in"
-                    className="w-full text-center text-sm font-medium py-2 rounded border border-[#eceae4] dark:border-[#23252a] text-[#1c1c1c]/70 dark:text-[#f7f8f8]/70 hover:text-[#1c1c1c] dark:hover:text-[#f7f8f8]"
+                    className="w-full text-center text-sm font-medium py-2 rounded border border-hairline text-ink-secondary hover:text-ink"
                   >
                     Sign in
                   </Link>
@@ -488,26 +488,26 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
 
   return (
     <section 
-      className="relative flex flex-col items-center justify-center min-h-screen pt-28 pb-16 px-6 text-center overflow-hidden border-b border-[#eceae4]"
+      className="relative flex flex-col items-center justify-center min-h-screen pt-28 pb-16 px-6 text-center overflow-hidden border-b border-hairline"
       style={{ background: "var(--canvas)" }}
     >
       <div className="relative z-10 flex flex-col items-center max-w-5xl w-full">
         {/* Active Engine Indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 border border-[#eceae4] bg-white">
-          <span className={`w-1.5 h-1.5 rounded-full ${state === "success" ? "bg-emerald-500 animate-pulse" : "bg-[#1c1c1c]"}`} />
-          <span className="text-[#1c1c1c]/80 font-sans text-sm font-medium">
-            Orchestrator: <span className="text-[#1c1c1c] font-semibold">{state === "typing" ? "Ingesting" : state === "ingest" ? "Parsing" : state === "resolving" ? "Executing" : "Resolved"}</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full mb-8 border border-hairline bg-surface-1">
+          <span className={`w-1.5 h-1.5 rounded-full ${state === "success" ? "bg-emerald-500 animate-pulse" : "bg-ink"}`} />
+          <span className="text-ink-secondary font-sans text-sm font-medium">
+            Orchestrator: <span className="text-ink font-semibold">{state === "typing" ? "Ingesting" : state === "ingest" ? "Parsing" : state === "resolving" ? "Executing" : "Resolved"}</span>
           </span>
         </div>
 
         {/* Aggressive Display Headline */}
-        <h1 className="display-1 max-w-4xl mb-6 text-[#1c1c1c] tracking-[-0.04em] leading-[1.05] font-semibold">
+        <h1 className="display-1 max-w-4xl mb-6 text-ink tracking-[-0.04em] leading-[1.05] font-semibold">
           Stop managing email.
           <br />
           <span className="opacity-50">Start managing outcomes.</span>
         </h1>
 
-        <p className="body-md max-w-2xl mb-10 text-[#1c1c1c]/80 leading-relaxed font-sans">
+        <p className="body-md max-w-2xl mb-10 text-ink-secondary leading-relaxed font-sans">
           Syncar is the local-first command layer for communication. Connect Gmail and Google Calendar to turn scattered threads into high-speed, automated AI workflows.
         </p>
 
@@ -519,7 +519,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                 Connect Workspace Free
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#transform" className="btn-lovable-outline px-6 py-3 text-sm font-medium rounded-md text-[#1c1c1c] inline-flex items-center gap-2">
+              <a href="#transform" className="btn-lovable-outline px-6 py-3 text-sm font-medium rounded-md text-ink inline-flex items-center gap-2">
                 See Comparative Flow
               </a>
             </>
@@ -534,12 +534,12 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
 
         {/* Immersive Living Workflow Canvas */}
         <div 
-          className="w-full max-w-4xl rounded-xl border border-[#eceae4] overflow-hidden relative shadow-sm flex flex-col p-8 bg-white"
+          className="w-full max-w-4xl rounded-xl border border-hairline overflow-hidden relative shadow-sm flex flex-col p-8 bg-surface-1"
         >
           {/* Header Bar */}
-          <div className="flex items-center justify-between border-b border-[#eceae4] pb-4 mb-6">
-            <span className="text-sm font-medium text-[#1c1c1c]/70">Interactive simulator</span>
-            <div className="text-sm bg-[#1c1c1c]/5 text-[#1c1c1c] font-medium px-2.5 py-0.5 rounded-md border border-[#1c1c1c]/10 font-sans">
+          <div className="flex items-center justify-between border-b border-hairline pb-4 mb-6">
+            <span className="text-sm font-medium text-ink-secondary">Interactive simulator</span>
+            <div className="text-sm bg-ink/5 text-ink font-medium px-2.5 py-0.5 rounded-md border border-ink/10 font-sans">
               {currentScenario.badge}
             </div>
           </div>
@@ -549,13 +549,13 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
             
             {/* Input Node (Left) */}
             <div className="md:col-span-4 flex flex-col gap-2 text-left z-10">
-              <span className="text-sm font-medium text-[#1c1c1c]/60">Inbound prompt</span>
+              <span className="text-sm font-medium text-ink-muted">Inbound prompt</span>
               <div 
-                className="p-4 rounded-lg border border-[#eceae4] min-h-[90px] flex items-start gap-2 relative bg-[#f7f4ed] shadow-inner"
+                className="p-4 rounded-lg border border-hairline min-h-[90px] flex items-start gap-2 relative bg-[#f7f4ed] dark:bg-surface-2 shadow-inner"
               >
-                <div className="text-sm font-normal text-[#1c1c1c]/90 leading-relaxed font-sans">
+                <div className="text-sm font-normal text-ink leading-relaxed font-sans">
                   "{typedPrompt}"
-                  {state === "typing" && <span className="animate-pulse text-[#1c1c1c] font-bold">|</span>}
+                  {state === "typing" && <span className="animate-pulse text-ink font-bold">|</span>}
                 </div>
               </div>
             </div>
@@ -564,7 +564,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
             <div className="md:col-span-4 flex flex-col items-center justify-center relative z-10">
               <div className="relative w-20 h-20 flex items-center justify-center">
                 {/* Subtle solid ring */}
-                <div className={`absolute inset-0 rounded-full border transition-colors duration-500 ${state === "success" ? "border-emerald-500/20" : "border-[#eceae4]"}`} />
+                <div className={`absolute inset-0 rounded-full border transition-colors duration-500 ${state === "success" ? "border-emerald-500/20" : "border-hairline"}`} />
                 
                 {/* Core Sphere */}
                 <div 
@@ -572,8 +572,8 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                     state === "success" 
                       ? "bg-emerald-555/5 border-emerald-500 text-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.05)]" 
                       : state === "resolving" || state === "ingest"
-                      ? "bg-[#1c1c1c] border-[#1c1c1c] text-[#fcfbf8] animate-pulse"
-                      : "bg-[#fafafa] border-[#eceae4] text-[#1c1c1c]/60"
+                      ? "bg-ink border-ink text-canvas animate-pulse"
+                      : "bg-surface-1 border-hairline text-ink-muted"
                   }`}
                 >
                   <Bot className="w-6 h-6" />
@@ -589,7 +589,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                       initial={{ y: 8, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: -8, opacity: 0 }}
-                      className="text-sm text-[#1c1c1c]/80 font-medium font-sans"
+                      className="text-sm text-ink-secondary font-medium font-sans"
                     >
                       {currentScenario.steps[0]}
                     </motion.span>
@@ -610,7 +610,7 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
 
             {/* Resolved Targets Node (Right) */}
             <div className="md:col-span-4 flex flex-col gap-3 text-left relative z-10">
-              <span className="text-sm font-medium text-[#1c1c1c]/60">Executed action</span>
+              <span className="text-sm font-medium text-ink-muted">Executed action</span>
               
               <AnimatePresence mode="wait">
                 {state === "success" ? (
@@ -626,9 +626,9 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                       <div className="p-3 rounded-lg border border-emerald-200 bg-emerald-50/30 flex items-start gap-2.5">
                         <Calendar className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-semibold text-[#1c1c1c]">{currentScenario.calendarDetail.title}</p>
-                          <p className="text-sm text-[#1c1c1c]/70 flex items-center gap-1 mt-0.5 font-sans">
-                            <Clock className="w-3.5 h-3.5 text-[#1c1c1c]/50" /> {currentScenario.calendarDetail.time}
+                          <p className="text-sm font-semibold text-ink">{currentScenario.calendarDetail.title}</p>
+                          <p className="text-sm text-ink-secondary flex items-center gap-1 mt-0.5 font-sans">
+                            <Clock className="w-3.5 h-3.5 text-ink-muted" /> {currentScenario.calendarDetail.time}
                           </p>
                         </div>
                       </div>
@@ -636,20 +636,20 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
 
                     {/* Email draft created */}
                     {currentScenario.emailDetail && (
-                      <div className="p-3 rounded-lg border border-[#eceae4] bg-white flex items-start gap-2.5 max-w-full">
-                        <Mail className="w-4 h-4 text-[#1c1c1c] mt-0.5 flex-shrink-0" />
+                      <div className="p-3 rounded-lg border border-hairline bg-surface-1 flex items-start gap-2.5 max-w-full">
+                        <Mail className="w-4 h-4 text-ink mt-0.5 flex-shrink-0" />
                         <div className="overflow-hidden flex-1 text-sm">
-                          <p className="text-sm text-[#1c1c1c]/60">To: {currentScenario.emailDetail.to}</p>
-                          <p className="font-semibold text-[#1c1c1c] truncate mt-0.5">{currentScenario.emailDetail.subject}</p>
-                          <p className="text-sm text-[#1c1c1c]/80 truncate mt-0.5 italic">"{currentScenario.emailDetail.body}"</p>
+                          <p className="text-sm text-ink-muted">To: {currentScenario.emailDetail.to}</p>
+                          <p className="font-semibold text-ink truncate mt-0.5">{currentScenario.emailDetail.subject}</p>
+                          <p className="text-sm text-ink-secondary truncate mt-0.5 italic">"{currentScenario.emailDetail.body}"</p>
                         </div>
                       </div>
                     )}
                   </motion.div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center p-8 border border-dashed border-[#eceae4] rounded-lg text-center h-[160px] text-zinc-400 w-full">
-                    <Clock className="w-4 h-4 mb-2 animate-spin text-[#1c1c1c]/50" />
-                    <span className="text-sm font-sans text-[#1c1c1c]/60">Awaiting orchestrator...</span>
+                  <div className="flex flex-col items-center justify-center p-8 border border-dashed border-hairline rounded-lg text-center h-[160px] text-zinc-400 w-full">
+                    <Clock className="w-4 h-4 mb-2 animate-spin text-ink-muted" />
+                    <span className="text-sm font-sans text-ink-muted">Awaiting orchestrator...</span>
                   </div>
                 )}
               </AnimatePresence>
@@ -715,12 +715,12 @@ function WorkflowTransformation() {
   };
 
   return (
-    <section id="transform" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="transform" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Comparison</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">Friction Comparison</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Friction Comparison</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             Siloed apps introduce coordination friction. Compare step-by-step clicks side-by-side.
           </p>
         </div>
@@ -728,13 +728,13 @@ function WorkflowTransformation() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           
           {/* Traditional Panel */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#eceae4] mb-8">
-                <span className="text-sm font-semibold text-[#1c1c1c]/85 flex items-center gap-1.5">
+              <div className="flex items-center justify-between pb-4 border-b border-hairline mb-8">
+                <span className="text-sm font-semibold text-ink-secondary flex items-center gap-1.5">
                   <ArrowRightLeft className="w-3.5 h-3.5" /> Siloed Gmail + Calendar
                 </span>
-                <span className="text-sm text-[#1c1c1c]/60 font-semibold">17 steps</span>
+                <span className="text-sm text-ink-muted font-semibold">17 steps</span>
               </div>
 
               {/* Progress steps */}
@@ -744,35 +744,35 @@ function WorkflowTransformation() {
                     key={step.title} 
                     className={`p-3.5 rounded-lg border transition-all duration-200 ${
                       activeStep === idx 
-                        ? "bg-[#fafafa] border-[#1c1c1c]/30 text-[#1c1c1c] font-semibold" 
+                        ? "bg-surface-2 border-hairline-strong text-ink font-semibold" 
                         : idx < activeStep 
-                        ? "bg-[#fafafa]/50 border-[#eceae4]/20 text-[#1c1c1c]/40 line-through opacity-45" 
-                        : "bg-transparent border-transparent text-[#1c1c1c]/70"
+                        ? "bg-surface-1/50 border-hairline/20 text-ink-muted/40 line-through opacity-45" 
+                        : "bg-transparent border-transparent text-ink-secondary"
                     }`}
                   >
-                    <h4 className="text-sm font-semibold font-sans text-[#1c1c1c]">{step.title}</h4>
-                    <p className="text-sm text-[#1c1c1c]/70 mt-1 leading-normal font-sans">{step.desc}</p>
+                    <h4 className="text-sm font-semibold font-sans text-ink">{step.title}</h4>
+                    <p className="text-sm text-ink-secondary mt-1 leading-normal font-sans">{step.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="mt-10 border-t border-[#eceae4] pt-6 flex flex-col gap-4">
+            <div className="mt-10 border-t border-hairline pt-6 flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-medium text-[#1c1c1c]/60 block">Clicks</span>
-                  <p className="text-xl font-semibold tracking-tight text-[#1c1c1c] font-sans">{clickCount}</p>
+                  <span className="text-sm font-medium text-ink-muted block">Clicks</span>
+                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">{clickCount}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-sm font-medium text-[#1c1c1c]/60 block">Duration</span>
-                  <p className="text-xl font-semibold tracking-tight text-[#1c1c1c] font-sans">{timeText}</p>
+                  <span className="text-sm font-medium text-ink-muted block">Duration</span>
+                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">{timeText}</p>
                 </div>
               </div>
 
               <button 
                 onClick={triggerSimulation}
                 disabled={isPlaying}
-                className="w-full btn-lovable-outline px-4 py-2.5 text-sm font-medium rounded-md text-[#1c1c1c] transition-all flex items-center justify-center gap-2"
+                className="w-full btn-lovable-outline px-4 py-2.5 text-sm font-medium rounded-md text-ink transition-all flex items-center justify-center gap-2"
               >
                 {isPlaying ? "Simulating clicks..." : "Simulate clicks"}
               </button>
@@ -780,37 +780,37 @@ function WorkflowTransformation() {
           </div>
 
           {/* Syncar Panel */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between relative shadow-sm">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#eceae4] mb-8">
-                <span className="text-sm font-semibold text-[#1c1c1c] flex items-center gap-1.5">
+              <div className="flex items-center justify-between pb-4 border-b border-hairline mb-8">
+                <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5" /> Syncar Flow
                 </span>
-                <span className="text-sm text-[#1c1c1c]/60 font-semibold">1 Action</span>
+                <span className="text-sm text-ink-muted font-semibold">1 Action</span>
               </div>
 
-              <div className="p-6 rounded-lg border border-[#eceae4] bg-[#f7f4ed] flex flex-col gap-3 min-h-[160px] justify-center text-left">
-                <span className="text-sm font-medium text-[#1c1c1c]/60">Natural language prompt</span>
-                <div className="text-sm font-normal text-[#1c1c1c]/90 p-3 rounded bg-white border border-[#eceae4] select-none font-sans">
+              <div className="p-6 rounded-lg border border-hairline bg-[#f7f4ed] dark:bg-surface-2 flex flex-col gap-3 min-h-[160px] justify-center text-left">
+                <span className="text-sm font-medium text-ink-muted">Natural language prompt</span>
+                <div className="text-sm font-normal text-ink p-3 rounded bg-surface-1 border border-hairline select-none font-sans">
                   "Schedule meeting with Sarah next Thursday afternoon"
                 </div>
 
-                <div className="flex items-center gap-2 text-sm text-[#1c1c1c]/70 mt-1 font-sans">
-                  <Bot className="w-3.5 h-3.5 text-[#1c1c1c]" />
+                <div className="flex items-center gap-2 text-sm text-ink-secondary mt-1 font-sans">
+                  <Bot className="w-3.5 h-3.5 text-ink" />
                   <span>Syncar maps intent, creates event, and drafts reply confirmation.</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-10 border-t border-[#eceae4] pt-6 flex flex-col gap-4">
+            <div className="mt-10 border-t border-hairline pt-6 flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-medium text-[#1c1c1c]/60 block">Clicks</span>
-                  <p className="text-xl font-semibold tracking-tight text-[#1c1c1c] font-sans">1 Action</p>
+                  <span className="text-sm font-medium text-ink-muted block">Clicks</span>
+                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">1 Action</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-sm font-medium text-[#1c1c1c]/60 block">Duration</span>
-                  <p className="text-xl font-semibold tracking-tight text-[#1c1c1c] font-sans">1.8 seconds</p>
+                  <span className="text-sm font-medium text-ink-muted block">Duration</span>
+                  <p className="text-xl font-semibold tracking-tight text-ink font-sans">1.8 seconds</p>
                 </div>
               </div>
 
@@ -819,9 +819,9 @@ function WorkflowTransformation() {
                 disabled={syncarStatus !== "idle"}
                 className={`w-full text-sm font-medium transition-all duration-300 py-2.5 rounded-md ${
                   syncarStatus === "success" 
-                    ? "bg-emerald-50 border border-emerald-200 text-emerald-700 cursor-default" 
+                    ? "bg-emerald-550/10 border border-emerald-500/35 text-emerald-600 dark:text-emerald-400 cursor-default" 
                     : syncarStatus === "running"
-                    ? "bg-[#f2eee5] border border-[#eceae4] text-[#1c1c1c]/60 animate-pulse"
+                    ? "bg-[#f2eee5] dark:bg-surface-3 border border-hairline text-ink-muted animate-pulse"
                     : "btn-lovable-primary"
                 }`}
               >
@@ -886,12 +886,12 @@ function AICommandCenter() {
   };
 
   return (
-    <section id="commands" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="commands" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Command workspace</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">AI Command Center</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">AI Command Center</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             Trigger visual outcomes instantly. Click on one of the presets to watch the assistant resolve the action.
           </p>
         </div>
@@ -904,8 +904,8 @@ function AICommandCenter() {
               onClick={() => handlePresetClick(idx)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all border ${
                 activePreset === idx 
-                  ? "bg-[#1c1c1c] border-[#1c1c1c] text-[#fcfbf8]" 
-                  : "bg-white border-[#eceae4] text-[#1c1c1c]/80 hover:border-[#1c1c1c]/30"
+                  ? "bg-ink border-ink text-canvas font-semibold" 
+                  : "bg-surface-1 border-hairline text-ink-secondary hover:border-hairline-strong"
               }`}
             >
               {p.title}
@@ -914,40 +914,40 @@ function AICommandCenter() {
         </div>
 
         {/* Chat assistant container */}
-        <div className="w-full max-w-4xl mx-auto rounded-xl border border-[#eceae4] overflow-hidden shadow-sm bg-white">
+        <div className="w-full max-w-4xl mx-auto rounded-xl border border-hairline overflow-hidden shadow-sm bg-surface-1">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[#eceae4] bg-[#f7f4ed]">
-            <span className="text-sm font-semibold text-[#1c1c1c] flex items-center gap-2">
-              <Bot className="w-4 h-4 text-[#1c1c1c]" /> Syncar AI Assistant
+          <div className="flex items-center justify-between px-6 py-4 border-b border-hairline bg-[#f7f4ed] dark:bg-surface-2">
+            <span className="text-sm font-semibold text-ink flex items-center gap-2">
+              <Bot className="w-4 h-4 text-ink" /> Syncar AI Assistant
             </span>
-            <span className="text-sm font-semibold text-[#1c1c1c]/60">Interactive shell</span>
+            <span className="text-sm font-semibold text-ink-muted">Interactive shell</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 min-h-[320px]">
             
             {/* Assistant Dialog Pane (Left 7 Columns) */}
-            <div className="md:col-span-7 p-6 border-b md:border-b-0 md:border-r border-[#eceae4] flex flex-col justify-between bg-white min-h-[260px] text-left">
+            <div className="md:col-span-7 p-6 border-b md:border-b-0 md:border-r border-hairline flex flex-col justify-between bg-surface-1 min-h-[260px] text-left">
               <div className="space-y-5">
                 {/* User Message */}
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded bg-[#f2eee5] flex items-center justify-center font-semibold text-sm text-[#1c1c1c]/80 flex-shrink-0 font-sans">U</div>
-                  <div className="text-sm font-normal text-[#1c1c1c]/90 leading-relaxed font-sans">
+                  <div className="w-7 h-7 rounded bg-surface-2 flex items-center justify-center font-semibold text-sm text-ink-secondary flex-shrink-0 font-sans">U</div>
+                  <div className="text-sm font-normal text-ink leading-relaxed font-sans">
                     {promptInput || "Select a preset above to ask the assistant..."}
-                    {executing && !activeSteps.length && <span className="animate-pulse text-[#1c1c1c]">|</span>}
+                    {executing && !activeSteps.length && <span className="animate-pulse text-ink">|</span>}
                   </div>
                 </div>
 
                 {/* Assistant Processing Steps */}
                 {activeSteps.length > 0 && (
-                  <div className="flex items-start gap-3 border-t border-[#eceae4] pt-4">
-                    <div className="w-7 h-7 rounded bg-[#1c1c1c] text-white flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-start gap-3 border-t border-hairline pt-4">
+                    <div className="w-7 h-7 rounded bg-ink text-canvas flex items-center justify-center flex-shrink-0">
                       <Bot className="w-3.5 h-3.5" />
                     </div>
                     <div className="space-y-2">
-                      <span className="text-sm font-medium text-[#1c1c1c]/60 block">AI progress</span>
+                      <span className="text-sm font-medium text-ink-muted block">AI progress</span>
                       {activeSteps.map((step, idx) => (
-                        <div key={idx} className="text-sm text-[#1c1c1c]/80 flex items-center gap-2 leading-relaxed font-sans">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#1c1c1c] flex-shrink-0" />
+                        <div key={idx} className="text-sm text-ink-secondary flex items-center gap-2 leading-relaxed font-sans">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-ink flex-shrink-0" />
                           <span>{step}</span>
                         </div>
                       ))}
@@ -957,15 +957,15 @@ function AICommandCenter() {
               </div>
 
               {!executing && !resolved && (
-                <div className="text-sm text-[#1c1c1c]/60 italic select-none font-sans">
+                <div className="text-sm text-ink-muted italic select-none font-sans">
                   Preset actions show checklist completions inside the assistant thread.
                 </div>
               )}
             </div>
 
             {/* Resolved outcome container (Right 5 Columns) */}
-            <div className="md:col-span-5 p-6 flex flex-col justify-center bg-[#fafafa] min-h-[220px] text-left">
-              <span className="text-sm font-medium text-[#1c1c1c]/60 mb-4 block">Resolution outcomes</span>
+            <div className="md:col-span-5 p-6 flex flex-col justify-center bg-surface-2 min-h-[220px] text-left">
+              <span className="text-sm font-medium text-ink-muted mb-4 block">Resolution outcomes</span>
 
               <AnimatePresence mode="wait">
                 {resolved && activePreset !== null ? (
@@ -977,50 +977,50 @@ function AICommandCenter() {
                     className="space-y-4"
                   >
                     {PRESETS[activePreset].result.event && (
-                      <div className="p-4 rounded-lg border border-[#eceae4] bg-white">
-                        <span className="text-sm text-[#1c1c1c] font-semibold flex items-center gap-1.5 mb-2">
+                      <div className="p-4 rounded-lg border border-hairline bg-surface-1">
+                        <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-2">
                           <Calendar className="w-3.5 h-3.5" /> Calendar block created
                         </span>
-                        <h4 className="text-sm font-semibold text-[#1c1c1c] font-sans">{PRESETS[activePreset].result.event.title}</h4>
-                        <p className="text-sm text-[#1c1c1c]/80 mt-1 flex items-center gap-1 font-sans">
-                          <Clock className="w-3.5 h-3.5 text-[#1c1c1c]/50" /> {PRESETS[activePreset].result.event.time}
+                        <h4 className="text-sm font-semibold text-ink font-sans">{PRESETS[activePreset].result.event.title}</h4>
+                        <p className="text-sm text-ink-secondary mt-1 flex items-center gap-1 font-sans">
+                          <Clock className="w-3.5 h-3.5 text-ink-muted" /> {PRESETS[activePreset].result.event.time}
                         </p>
                       </div>
                     )}
 
                     {PRESETS[activePreset].result.email && (
-                      <div className="p-4 rounded-lg border border-[#eceae4] bg-white text-sm">
-                        <span className="text-sm text-[#1c1c1c] font-semibold flex items-center gap-1.5 mb-2">
+                      <div className="p-4 rounded-lg border border-hairline bg-surface-1 text-sm">
+                        <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-2">
                           <Mail className="w-3.5 h-3.5" /> Gmail draft confirmation
                         </span>
-                        <p className="text-sm text-[#1c1c1c]/60 font-sans">To: {PRESETS[activePreset].result.email.to}</p>
-                        <p className="font-semibold text-[#1c1c1c] mt-0.5 truncate font-sans">{PRESETS[activePreset].result.email.subject}</p>
-                        <p className="text-sm text-[#1c1c1c]/80 mt-1.5 italic p-2 rounded bg-[#f7f4ed] border border-[#eceae4] leading-relaxed font-sans">
+                        <p className="text-sm text-ink-muted font-sans">To: {PRESETS[activePreset].result.email.to}</p>
+                        <p className="font-semibold text-ink mt-0.5 truncate font-sans">{PRESETS[activePreset].result.email.subject}</p>
+                        <p className="text-sm text-ink-secondary mt-1.5 italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed font-sans">
                           "{PRESETS[activePreset].result.email.body}"
                         </p>
                       </div>
                     )}
 
                     {PRESETS[activePreset].result.digest && (
-                      <div className="p-4 rounded-lg border border-[#eceae4] bg-white space-y-3">
-                        <span className="text-sm text-[#1c1c1c] font-semibold flex items-center gap-1.5 mb-1.5">
+                      <div className="p-4 rounded-lg border border-hairline bg-surface-1 space-y-3">
+                        <span className="text-sm text-ink font-semibold flex items-center gap-1.5 mb-1.5">
                           <Bot className="w-3.5 h-3.5" /> Focus Digest Brief
                         </span>
                         {PRESETS[activePreset].result.digest.map((d, index) => (
-                          <div key={index} className="border-t border-[#eceae4] pt-2 first:border-0 first:pt-0">
+                          <div key={index} className="border-t border-hairline pt-2 first:border-0 first:pt-0">
                             <div className="flex items-center justify-between mb-0.5 font-sans">
-                              <span className="text-sm font-semibold text-[#1c1c1c]">{d.from}</span>
-                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-[#1c1c1c]/5 text-[#1c1c1c]">{d.priority}</span>
+                              <span className="text-sm font-semibold text-ink">{d.from}</span>
+                              <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-ink/5 text-ink">{d.priority}</span>
                             </div>
-                            <p className="text-sm text-[#1c1c1c]/80 leading-snug font-sans">{d.text}</p>
+                            <p className="text-sm text-ink-secondary leading-snug font-sans">{d.text}</p>
                           </div>
                         ))}
                       </div>
                     )}
                   </motion.div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center p-8 border border-dashed border-[#eceae4] rounded-lg text-center h-[200px] text-[#1c1c1c]/40">
-                    <Sliders className="w-5 h-5 text-[#eceae4] mb-2" />
+                  <div className="flex flex-col items-center justify-center p-8 border border-dashed border-hairline rounded-lg text-center h-[200px] text-ink-muted">
+                    <Sliders className="w-5 h-5 text-hairline mb-2" />
                     <span className="text-sm font-sans">Awaiting prompt submission...</span>
                   </div>
                 )}
@@ -1045,7 +1045,7 @@ function ChaosToClarity() {
     { id: 1, from: "Marcus Webb", subject: "CRITICAL: Database connection pool leak SYN-2847", desc: "Our database is capping connections on our Neon postgres clusters.", priority: "HIGH" },
     { id: 2, from: "Newsletter Digest", subject: "Vercel Next.js 16 updates", desc: "Here are the top changes you need to know about Next.js and Tailwind.", priority: "LOW" },
     { id: 3, from: "Sarah Chen", subject: "Q3 Partnership Pitch Deck Review", desc: "Let's review the investment slide deck and schedule a alignment slot.", priority: "HIGH" },
-    { id: 4, from: "Priya Sharma", subject: "Lunch tomorrow at cafe?", desc: "Hey! Let me know if you want to grab tacos at the cafe tomorrow at 1 PM.", priority: "MEDIUM" }
+    { id: 4, from: "Priya Sharma", subject: "Lunch tomorrow at cafe?", desc: "Hey! Let know if you want to grab tacos at the cafe tomorrow at 1 PM.", priority: "MEDIUM" }
   ];
 
   const runSorting = () => {
@@ -1059,12 +1059,12 @@ function ChaosToClarity() {
   };
 
   return (
-    <section id="clarity" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="clarity" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Priority classification</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">From Chaos to Clarity</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">From Chaos to Clarity</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             Say goodbye to unsorted inboxes. Syncar categorizes priority queues, letting you focus on the details that require actions.
           </p>
         </div>
@@ -1073,15 +1073,15 @@ function ChaosToClarity() {
           
           {/* Left Column: Flow Trigger (5 Columns) */}
           <div className="lg:col-span-5 space-y-6 text-left">
-            <h3 className="heading-2 text-[#1c1c1c] font-semibold tracking-[-0.02em]">Clean workspace priorities</h3>
-            <p className="body-sm text-[#1c1c1c]/80 leading-relaxed font-sans">
+            <h3 className="heading-2 text-ink font-semibold tracking-[-0.02em]">Clean workspace priorities</h3>
+            <p className="body-sm text-ink-secondary leading-relaxed font-sans">
               When emails sync locally, background workers map key metadata to Gemini. Syncar analyzes thread context, calendar slots, and contact values to organize them into priorities.
             </p>
 
             <button
               onClick={runSorting}
               disabled={isSorting}
-              className="px-5 py-2.5 inline-flex items-center gap-2 text-sm font-medium rounded-md bg-[#1c1c1c] text-white hover:bg-[#1c1c1c]/90 transition-all"
+              className="px-5 py-2.5 inline-flex items-center gap-2 text-sm font-medium rounded-md bg-ink text-canvas hover:opacity-90 transition-all cursor-pointer"
             >
               {isSorting ? (
                 <>
@@ -1099,14 +1099,14 @@ function ChaosToClarity() {
 
           {/* Right Column: Visualizer Box (7 Columns) */}
           <div 
-            className="lg:col-span-7 rounded-xl border border-[#eceae4] p-6 relative overflow-hidden bg-white min-h-[340px] flex flex-col justify-between shadow-sm"
+            className="lg:col-span-7 rounded-xl border border-hairline p-6 relative overflow-hidden bg-surface-1 min-h-[340px] flex flex-col justify-between shadow-sm"
           >
             {/* Header bar */}
-            <div className="flex items-center justify-between pb-4 border-b border-[#eceae4]">
-              <span className="text-sm font-semibold text-[#1c1c1c] flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-[#1c1c1c]" /> Local cache inbox
+            <div className="flex items-center justify-between pb-4 border-b border-hairline">
+              <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
+                <Database className="w-3.5 h-3.5 text-ink" /> Local cache inbox
               </span>
-              <span className="text-sm bg-[#1c1c1c]/5 text-[#1c1c1c] font-medium px-2.5 py-0.5 rounded-md border border-[#1c1c1c]/10">
+              <span className="text-sm bg-ink/5 text-ink font-medium px-2.5 py-0.5 rounded-md border border-ink/10">
                 {isSorted ? "Classified" : isSorting ? "Parsing..." : "Pending Classify"}
               </span>
             </div>
@@ -1125,13 +1125,13 @@ function ChaosToClarity() {
                     {rawEmails.map((item) => (
                       <div 
                         key={item.id}
-                        className="p-3.5 rounded-lg border border-[#eceae4] bg-[#fafafa] flex items-center justify-between"
+                        className="p-3.5 rounded-lg border border-hairline bg-surface-2 flex items-center justify-between"
                       >
                         <div className="overflow-hidden flex-1 pr-4 text-sm font-sans">
-                          <span className="text-sm font-semibold text-[#1c1c1c]/60">{item.from}</span>
-                          <h4 className="font-semibold text-[#1c1c1c] truncate mt-0.5">{item.subject}</h4>
+                          <span className="text-sm font-semibold text-ink-muted">{item.from}</span>
+                          <h4 className="font-semibold text-ink truncate mt-0.5">{item.subject}</h4>
                         </div>
-                        <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-[#f2eee5] text-[#1c1c1c]/85 border border-[#eceae4]/60 font-sans">
+                        <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-[#f2eee5] dark:bg-surface-3 text-ink-secondary border border-hairline/60 font-sans">
                           Pending AI
                         </span>
                       </div>
@@ -1147,11 +1147,11 @@ function ChaosToClarity() {
                       <motion.div 
                         animate={{ scale: [1, 1.1, 1], rotate: 360 }}
                         transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                        className="absolute inset-0 border-2 border-[#1c1c1c] rounded-full border-t-transparent"
+                        className="absolute inset-0 border-2 border-ink rounded-full border-t-transparent"
                       />
-                      <Bot className="w-5 h-5 text-[#1c1c1c]" />
+                      <Bot className="w-5 h-5 text-ink" />
                     </div>
-                    <span className="text-sm text-[#1c1c1c] font-medium animate-pulse font-sans">Running priority matrix...</span>
+                    <span className="text-sm text-ink font-medium animate-pulse font-sans">Running priority matrix...</span>
                   </motion.div>
                 ) : (
                   // Sorted priority stream (unified list, opacity reduction for low priority)
@@ -1166,29 +1166,29 @@ function ChaosToClarity() {
                         key={item.id}
                         className={`p-3.5 rounded-lg border flex items-center justify-between transition-all duration-300 ${
                           item.priority === "HIGH" 
-                            ? "bg-white border-red-200 bg-red-50/30" 
+                            ? "bg-surface-1 border-red-200 dark:border-red-900/30 bg-red-50/10 dark:bg-red-950/10" 
                             : item.priority === "MEDIUM"
-                            ? "bg-white border-amber-200 bg-amber-50/30"
-                            : "bg-white border-[#eceae4] opacity-50"
+                            ? "bg-surface-1 border-amber-200 dark:border-amber-900/30 bg-amber-50/10 dark:bg-amber-950/10"
+                            : "bg-surface-1 border-hairline opacity-50"
                         }`}
                       >
                         <div className="overflow-hidden flex-1 pr-4 text-sm font-sans">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-[#1c1c1c]/60">{item.from}</span>
+                            <span className="text-sm font-semibold text-ink-muted">{item.from}</span>
                             {item.priority === "HIGH" ? (
-                              <span className="text-xs font-semibold bg-red-100/50 text-red-700 px-1.5 py-0.5 rounded">High</span>
+                              <span className="text-xs font-semibold bg-red-100/50 dark:bg-red-950/30 text-red-700 dark:text-red-400 px-1.5 py-0.5 rounded">High</span>
                             ) : item.priority === "MEDIUM" ? (
-                              <span className="text-xs font-semibold bg-amber-100/50 text-amber-700 px-1.5 py-0.5 rounded">Medium</span>
+                              <span className="text-xs font-semibold bg-amber-100/50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded">Medium</span>
                             ) : (
-                              <span className="text-xs font-semibold bg-[#f2eee5]/50 text-[#1c1c1c]/50 px-1.5 py-0.5 rounded">Low</span>
+                              <span className="text-xs font-semibold bg-[#f2eee5]/50 dark:bg-surface-3/50 text-ink-muted px-1.5 py-0.5 rounded">Low</span>
                             )}
                           </div>
-                          <h4 className="font-semibold text-[#1c1c1c] truncate mt-0.5">{item.subject}</h4>
+                          <h4 className="font-semibold text-ink truncate mt-0.5">{item.subject}</h4>
                         </div>
                         {item.priority === "LOW" ? (
-                          <span className="text-sm text-[#1c1c1c]/50 font-medium italic font-sans">Auto-archived</span>
+                          <span className="text-sm text-ink-muted font-medium italic font-sans">Auto-archived</span>
                         ) : (
-                          <span className="text-sm text-emerald-700 font-semibold font-sans">Priority Classified</span>
+                          <span className="text-sm text-emerald-700 dark:text-emerald-400 font-semibold font-sans">Priority Classified</span>
                         )}
                       </div>
                     ))}
@@ -1198,11 +1198,11 @@ function ChaosToClarity() {
             </div>
 
             {/* Smart Digest Summary */}
-            <div className="p-4 rounded-lg bg-[#f7f4ed] border border-[#eceae4] flex items-start gap-2.5 text-sm text-left">
-              <Bot className="w-5 h-5 text-[#1c1c1c] flex-shrink-0 mt-0.5" />
+            <div className="p-4 rounded-lg bg-[#f7f4ed] dark:bg-surface-2 border border-hairline flex items-start gap-2.5 text-sm text-left">
+              <Bot className="w-5 h-5 text-ink flex-shrink-0 mt-0.5" />
               <div>
-                <span className="font-semibold text-[#1c1c1c] block font-sans">AI Focus Summary:</span>
-                <span className="text-[#1c1c1c]/80 mt-1 block leading-relaxed font-sans">
+                <span className="font-semibold text-ink block font-sans">AI Focus Summary:</span>
+                <span className="text-ink-secondary mt-1 block leading-relaxed font-sans">
                   {isSorted 
                     ? "2 urgent high priority threads need your response. Newsletter archive scheduled." 
                     : "Inbox currently unparsed. Trigger sorting to run prioritization index."}
@@ -1230,12 +1230,12 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
   };
 
   return (
-    <section id="intelligence" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="intelligence" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Coordinate Extract</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">Calendar Intelligence</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Calendar Intelligence</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             Schedule meetings without app hopping. Syncar highlights proposed slots and books events directly from email context.
           </p>
         </div>
@@ -1243,25 +1243,25 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Email Pane (Left - 6 Columns) */}
-          <div className="lg:col-span-6 bg-white border border-[#eceae4] rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
+          <div className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
             <div>
               {/* Email Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#eceae4] mb-6">
+              <div className="flex items-center justify-between pb-4 border-b border-hairline mb-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded bg-[#f2eee5] text-[#1c1c1c] flex items-center justify-center font-bold text-sm font-sans">S</div>
+                  <div className="w-8 h-8 rounded bg-surface-2 text-ink flex items-center justify-center font-bold text-sm font-sans">S</div>
                   <div>
-                    <h4 className="text-sm font-semibold text-[#1c1c1c] font-sans">Sarah Chen</h4>
-                    <p className="text-sm text-[#1c1c1c]/60 font-sans">sarah@partner-firm.com</p>
+                    <h4 className="text-sm font-semibold text-ink font-sans">Sarah Chen</h4>
+                    <p className="text-sm text-ink-muted font-sans">sarah@partner-firm.com</p>
                   </div>
                 </div>
-                <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">Yesterday, 4:18 PM</span>
+                <span className="text-sm text-ink-muted font-sans font-medium">Yesterday, 4:18 PM</span>
               </div>
 
               <div>
-                <span className="text-sm font-medium text-[#1c1c1c]/70 font-sans">Subject: Partnership Deck Coordination</span>
+                <span className="text-sm font-medium text-ink-secondary font-sans">Subject: Partnership Deck Coordination</span>
                 
                 {/* Email Body */}
-                <div className="mt-4 text-sm text-[#1c1c1c]/80 leading-relaxed bg-[#fafafa] p-4 rounded-lg border border-[#eceae4]">
+                <div className="mt-4 text-sm text-ink-secondary leading-relaxed bg-surface-2 p-4 rounded-lg border border-hairline">
                   <p>Hi Manoj,</p>
                   <br />
                   <p>
@@ -1271,7 +1271,7 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                       onMouseEnter={() => setHoveredTime("tuesday")}
                       onMouseLeave={() => setHoveredTime(null)}
                       onClick={() => confirmMeeting("tuesday")}
-                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-[#1c1c1c] text-[#1c1c1c] font-semibold bg-[#1c1c1c]/5 hover:bg-[#1c1c1c]/10 transition-all font-sans"
+                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all font-sans"
                     >
                       next Tuesday at 2:00 PM
                     </span>{" "}
@@ -1280,7 +1280,7 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                       onMouseEnter={() => setHoveredTime("friday")}
                       onMouseLeave={() => setHoveredTime(null)}
                       onClick={() => confirmMeeting("friday")}
-                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-[#1c1c1c] text-[#1c1c1c] font-semibold bg-[#1c1c1c]/5 hover:bg-[#1c1c1c]/10 transition-all font-sans"
+                      className="inline-block px-1.5 py-0.5 rounded cursor-pointer border border-ink text-ink font-semibold bg-ink/5 hover:bg-ink/10 transition-all font-sans"
                     >
                       Friday at 11:00 AM
                     </span>
@@ -1295,32 +1295,32 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-[#eceae4] text-sm text-[#1c1c1c]/60 flex items-center gap-2 font-sans">
-              <Bot className="w-3.5 h-3.5 text-[#1c1c1c]" />
+            <div className="mt-6 pt-4 border-t border-hairline text-sm text-ink-muted flex items-center gap-2 font-sans">
+              <Bot className="w-3.5 h-3.5 text-ink" />
               <span>Hover over dates in the email to preview calendar slots. Click to schedule.</span>
             </div>
           </div>
 
           {/* Calendar Day Grid (Right - 6 Columns) */}
-          <div className="lg:col-span-6 bg-white border border-[#eceae4] rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
+          <div className="lg:col-span-6 bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between text-left shadow-sm">
             <div className="w-full">
               {/* Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#eceae4] mb-6">
-                <span className="text-sm font-semibold text-[#1c1c1c] flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#1c1c1c]" /> Calendar Day Agenda
+              <div className="flex items-center justify-between pb-3 border-b border-hairline mb-6">
+                <span className="text-sm font-semibold text-ink flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-ink" /> Calendar Day Agenda
                 </span>
-                <span className="text-sm text-[#1c1c1c]/60 font-medium font-sans">June 2026</span>
+                <span className="text-sm text-ink-muted font-medium font-sans">June 2026</span>
               </div>
 
               {/* Day schedules */}
               <div className="space-y-6">
                 {/* Tuesday Schedule */}
                 <div>
-                  <span className="text-sm font-medium text-[#1c1c1c]/70 font-sans">Tuesday, June 16</span>
+                  <span className="text-sm font-medium text-ink-secondary font-sans">Tuesday, June 16</span>
                   <div className="mt-2 space-y-2">
-                    <div className="p-3 rounded border border-[#eceae4] bg-[#fafafa] text-sm flex items-center justify-between">
-                      <span className="text-[#1c1c1c]/80 font-sans">10:00 AM - Internal Sync</span>
-                      <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">1h</span>
+                    <div className="p-3 rounded border border-hairline bg-surface-2 text-sm flex items-center justify-between">
+                      <span className="text-ink-secondary font-sans">10:00 AM - Internal Sync</span>
+                      <span className="text-sm text-ink-muted font-sans font-medium">1h</span>
                     </div>
 
                     {/* Interactive Slot */}
@@ -1330,8 +1330,8 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                         bookedSlot === "tuesday"
                           ? "bg-emerald-550 border-emerald-300 text-emerald-700 font-semibold"
                           : hoveredTime === "tuesday"
-                          ? "bg-[#1c1c1c]/5 border-[#1c1c1c] text-[#1c1c1c] font-semibold"
-                          : "bg-white border-[#eceae4] text-[#1c1c1c]/60"
+                          ? "bg-ink/5 border-ink text-ink font-semibold"
+                          : "bg-surface-1 border-hairline text-ink-muted"
                       }`}
                     >
                       <span>
@@ -1341,14 +1341,14 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                           ? "💡 Suggestion: Finalize Revisions (Sarah)" 
                           : "2:00 PM - Available slot"}
                       </span>
-                      <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">30m</span>
+                      <span className="text-sm text-ink-muted font-sans font-medium">30m</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Friday Schedule */}
                 <div>
-                  <span className="text-sm font-medium text-[#1c1c1c]/70 font-sans">Friday, June 19</span>
+                  <span className="text-sm font-medium text-ink-secondary font-sans">Friday, June 19</span>
                   <div className="mt-2 space-y-2">
                     {/* Interactive Slot */}
                     <div 
@@ -1357,8 +1357,8 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                         bookedSlot === "friday"
                           ? "bg-emerald-555 border-emerald-300 text-emerald-700 font-semibold"
                           : hoveredTime === "friday"
-                          ? "bg-[#1c1c1c]/5 border-[#1c1c1c] text-[#1c1c1c] font-semibold"
-                          : "bg-white border-[#eceae4] text-[#1c1c1c]/60"
+                          ? "bg-ink/5 border-ink text-ink font-semibold"
+                          : "bg-surface-1 border-hairline text-ink-muted"
                       }`}
                     >
                       <span>
@@ -1368,12 +1368,12 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
                           ? "💡 Suggestion: Finalize Revisions (Sarah)" 
                           : "11:00 AM - Available slot"}
                       </span>
-                      <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">30m</span>
+                      <span className="text-sm text-ink-muted font-sans font-medium">30m</span>
                     </div>
 
-                    <div className="p-3 rounded border border-[#eceae4] bg-[#fafafa] text-sm flex items-center justify-between">
-                      <span className="text-[#1c1c1c]/80 font-sans">1:00 PM - Design Sign-off</span>
-                      <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">1.5h</span>
+                    <div className="p-3 rounded border border-hairline bg-surface-2 text-sm flex items-center justify-between">
+                      <span className="text-ink-secondary font-sans">1:00 PM - Design Sign-off</span>
+                      <span className="text-sm text-ink-muted font-sans font-medium">1.5h</span>
                     </div>
                   </div>
                 </div>
@@ -1382,7 +1382,7 @@ function CalendarIntelligence({ showToast }: { showToast: (msg: string, key?: st
               {bookedSlot && (
                 <button 
                   onClick={() => setBookedSlot(null)}
-                  className="mt-4 text-sm text-[#1c1c1c] hover:underline w-full text-right font-semibold font-sans"
+                  className="mt-4 text-sm text-ink hover:underline w-full text-right font-semibold font-sans"
                 >
                   Reset bookings
                 </button>
@@ -1440,12 +1440,12 @@ function UnifiedWorkspaceSection({
   const activeEmail = emails[selectedMailIndex];
 
   return (
-    <section id="workspace" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="workspace" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Unified Dashboard</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">A single source of truth</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">A single source of truth</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             No separate apps. Mail, calendar, and your AI assistant work together. Click on emails below to witness live cross-pane updates.
           </p>
         </div>
@@ -1458,8 +1458,8 @@ function UnifiedWorkspaceSection({
               onClick={() => setWorkspaceView(view)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all border ${
                 workspaceView === view 
-                  ? "bg-[#1c1c1c] text-white border-[#1c1c1c] font-semibold" 
-                  : "bg-white border-[#eceae4] text-[#1c1c1c]/70 hover:border-[#1c1c1c]/30"
+                  ? "bg-ink text-canvas border-ink font-semibold" 
+                  : "bg-surface-1 border-hairline text-ink-secondary hover:border-hairline-strong"
               }`}
             >
               {view} view
@@ -1469,16 +1469,16 @@ function UnifiedWorkspaceSection({
 
         {/* High-fidelity mockup box with single shadow */}
         <div 
-          className="w-full rounded-xl overflow-hidden border border-[#eceae4] shadow-sm bg-white"
+          className="w-full rounded-xl overflow-hidden border border-hairline shadow-sm bg-surface-1"
         >
           {/* Mock title bar */}
-          <div className="flex items-center gap-2 px-6 py-4 border-b border-[#eceae4] bg-[#fafafa]">
+          <div className="flex items-center gap-2 px-6 py-4 border-b border-hairline bg-surface-2">
             <div className="flex gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-[#eceae4]" />
-              <div className="w-2 h-2 rounded-full bg-[#eceae4]" />
-              <div className="w-2 h-2 rounded-full bg-[#eceae4]" />
+              <div className="w-2 h-2 rounded-full bg-hairline" />
+              <div className="w-2 h-2 rounded-full bg-hairline" />
+              <div className="w-2 h-2 rounded-full bg-hairline" />
             </div>
-            <div className="flex-1 flex items-center justify-center max-w-[280px] mx-auto bg-[#f2eee5] border border-[#eceae4] rounded-md py-0.5 px-3 text-sm text-[#1c1c1c]/80 font-sans font-medium">
+            <div className="flex-1 flex items-center justify-center max-w-[280px] mx-auto bg-[#f2eee5] dark:bg-surface-3 border border-hairline rounded-md py-0.5 px-3 text-sm text-ink-secondary font-sans font-medium">
               workspace.syncar.ai/{workspaceView}
             </div>
           </div>
@@ -1487,10 +1487,10 @@ function UnifiedWorkspaceSection({
           <div className="grid grid-cols-1 md:grid-cols-12 min-h-[440px]">
             
             {/* INBOX COLUMN (4 Columns) */}
-            <div className={`md:col-span-4 border-r border-[#eceae4] p-4 flex flex-col justify-between bg-white text-left ${workspaceView !== "inbox" ? "hidden md:flex" : ""}`}>
+            <div className={`md:col-span-4 border-r border-hairline p-4 flex flex-col justify-between bg-surface-1 text-left ${workspaceView !== "inbox" ? "hidden md:flex" : ""}`}>
               <div>
-                <span className="text-sm font-medium text-[#1c1c1c]/60 block mb-4 flex items-center gap-1.5 font-sans">
-                  <Mail className="w-3.5 h-3.5 text-[#1c1c1c]" /> Synced Inbox
+                <span className="text-sm font-medium text-ink-muted block mb-4 flex items-center gap-1.5 font-sans">
+                  <Mail className="w-3.5 h-3.5 text-ink" /> Synced Inbox
                 </span>
 
                 <div className="space-y-2">
@@ -1500,18 +1500,18 @@ function UnifiedWorkspaceSection({
                       onClick={() => setSelectedMailIndex(idx)}
                       className={`p-3 rounded-lg border text-left cursor-pointer transition-all duration-150 ${
                         selectedMailIndex === idx 
-                          ? "bg-[#f2eee5] border-[#1c1c1c]/20 shadow-inner" 
-                          : "bg-transparent border-transparent hover:bg-[#fafafa]"
+                          ? "bg-[#f2eee5] dark:bg-surface-2 border-hairline-strong shadow-inner" 
+                          : "bg-transparent border-transparent hover:bg-surface-2"
                       }`}
                     >
                       <div className="flex items-center justify-between font-sans">
-                        <span className="text-sm font-semibold text-[#1c1c1c]">{mail.from}</span>
-                        <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-[#1c1c1c]/5 text-[#1c1c1c]">
+                        <span className="text-sm font-semibold text-ink">{mail.from}</span>
+                        <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-[#1c1c1c]/5 text-ink font-sans">
                           {mail.priority}
                         </span>
                       </div>
-                      <h4 className="text-sm text-[#1c1c1c]/85 mt-1 truncate font-sans">{mail.subject}</h4>
-                      <span className="text-sm text-[#1c1c1c]/50 block mt-2 font-sans font-medium">{mail.time}</span>
+                      <h4 className="text-sm text-ink-secondary mt-1 truncate font-sans">{mail.subject}</h4>
+                      <span className="text-sm text-ink-muted block mt-2 font-sans font-medium">{mail.time}</span>
                     </div>
                   ))}
                 </div>
@@ -1519,37 +1519,37 @@ function UnifiedWorkspaceSection({
             </div>
 
             {/* CALENDAR COLUMN (4 Columns) */}
-            <div className={`md:col-span-4 border-r border-[#eceae4] p-4 flex flex-col justify-between bg-white text-left ${workspaceView !== "calendar" ? "hidden md:flex" : ""}`}>
+            <div className={`md:col-span-4 border-r border-hairline p-4 flex flex-col justify-between bg-surface-1 text-left ${workspaceView !== "calendar" ? "hidden md:flex" : ""}`}>
               <div>
-                <span className="text-sm font-medium text-[#1c1c1c]/60 block mb-4 flex items-center gap-1.5 font-sans">
-                  <Calendar className="w-3.5 h-3.5 text-[#1c1c1c]" /> Calendar Agenda
+                <span className="text-sm font-medium text-ink-muted block mb-4 flex items-center gap-1.5 font-sans">
+                  <Calendar className="w-3.5 h-3.5 text-ink" /> Calendar Agenda
                 </span>
 
                 <div className="space-y-3">
                   <div className={`p-3 rounded-lg border transition-all duration-300 ${
                     activeEmail.calHighlight === "11:00 AM"
-                      ? "bg-[#1c1c1c]/5 border-[#1c1c1c] text-[#1c1c1c] font-semibold"
-                      : "bg-[#fafafa] border-[#eceae4] text-[#1c1c1c]/80"
+                      ? "bg-ink/5 border-ink text-ink font-semibold"
+                      : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-[#1c1c1c]/50 font-medium">11:00 AM - 11:30 AM</span>
+                    <span className="text-sm block font-sans text-ink-muted font-medium">11:00 AM - 11:30 AM</span>
                     <span className="text-sm font-semibold block mt-0.5 font-sans">Partnership Sync</span>
                   </div>
  
                   <div className={`p-3 rounded-lg border transition-all duration-300 ${
                     activeEmail.calHighlight === "2:00 PM"
-                      ? "bg-[#1c1c1c]/5 border-[#1c1c1c] text-[#1c1c1c] font-semibold"
-                      : "bg-[#fafafa] border-[#eceae4] text-[#1c1c1c]/80"
+                      ? "bg-ink/5 border-ink text-ink font-semibold"
+                      : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-[#1c1c1c]/50 font-medium">2:00 PM - 2:30 PM</span>
+                    <span className="text-sm block font-sans text-ink-muted font-medium">2:00 PM - 2:30 PM</span>
                     <span className="text-sm font-semibold block mt-0.5 font-sans">Database Bug Debugging</span>
                   </div>
  
                   <div className={`p-3 rounded-lg border transition-all duration-300 ${
                     activeEmail.calHighlight === "4:00 PM"
-                      ? "bg-[#1c1c1c]/5 border-[#1c1c1c] text-[#1c1c1c] font-semibold"
-                      : "bg-[#fafafa] border-[#eceae4] text-[#1c1c1c]/80"
+                      ? "bg-ink/5 border-ink text-ink font-semibold"
+                      : "bg-surface-2 border-hairline text-ink-secondary"
                   }`}>
-                    <span className="text-sm block font-sans text-[#1c1c1c]/50 font-medium">4:00 PM - 4:45 PM</span>
+                    <span className="text-sm block font-sans text-ink-muted font-medium">4:00 PM - 4:45 PM</span>
                     <span className="text-sm font-semibold block mt-0.5 font-sans">Design Sign-off Review</span>
                   </div>
                 </div>
@@ -1557,24 +1557,24 @@ function UnifiedWorkspaceSection({
             </div>
 
             {/* AI CONTEXT COLUMN (4 Columns) */}
-            <div className={`md:col-span-4 p-4 flex flex-col justify-between bg-[#fafafa] text-left ${workspaceView !== "ai" ? "hidden md:flex" : ""}`}>
+            <div className={`md:col-span-4 p-4 flex flex-col justify-between bg-surface-2 text-left ${workspaceView !== "ai" ? "hidden md:flex" : ""}`}>
               <div className="space-y-4">
-                <span className="text-sm font-medium text-[#1c1c1c]/60 block flex items-center gap-1.5 font-sans">
-                  <Bot className="w-3.5 h-3.5 text-[#1c1c1c]" /> AI Context Assistant
+                <span className="text-sm font-medium text-ink-muted block flex items-center gap-1.5 font-sans">
+                  <Bot className="w-3.5 h-3.5 text-ink" /> AI Context Assistant
                 </span>
  
                 {/* Email Summary Box */}
-                <div className="p-3.5 rounded-lg border border-[#eceae4] bg-white">
-                  <span className="text-sm font-medium text-[#1c1c1c]/60 block mb-1 font-sans">Context summary</span>
-                  <p className="text-sm text-[#1c1c1c] leading-relaxed font-sans">{activeEmail.summary}</p>
+                <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
+                  <span className="text-sm font-medium text-ink-muted block mb-1 font-sans">Context summary</span>
+                  <p className="text-sm text-ink leading-relaxed font-sans">{activeEmail.summary}</p>
                 </div>
  
                 {/* AI Draft Suggestion */}
-                <div className="p-3.5 rounded-lg border border-[#eceae4] bg-white">
-                  <span className="text-sm font-semibold text-[#1c1c1c] block mb-2 flex items-center gap-1 font-sans">
+                <div className="p-3.5 rounded-lg border border-hairline bg-surface-1">
+                  <span className="text-sm font-semibold text-ink block mb-2 flex items-center gap-1 font-sans">
                     <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Auto-reply draft
                   </span>
-                  <p className="text-sm text-[#1c1c1c]/80 italic p-2 rounded bg-[#f7f4ed] border border-[#eceae4] leading-relaxed font-sans">
+                  <p className="text-sm text-ink-secondary italic p-2 rounded bg-[#f7f4ed] dark:bg-surface-2 border border-hairline leading-relaxed font-sans">
                     "{activeEmail.aiDraft}"
                   </p>
                 </div>
@@ -1615,12 +1615,12 @@ function SpeedLayer({
   };
 
   return (
-    <section id="speed" className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section id="speed" className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Keyboard First Engine</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">Built for the Speed Layer</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Built for the Speed Layer</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             Keep your hands on the home row. Syncar matches Superhuman's extreme speed and Raycast's quick menus. Try it right now on this page.
           </p>
         </div>
@@ -1628,71 +1628,71 @@ function SpeedLayer({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           
           {/* Left Column: Command Palette UI (6 Columns) */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-8 flex flex-col justify-between min-h-[300px] text-left shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-8 flex flex-col justify-between min-h-[300px] text-left shadow-sm">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#eceae4] mb-6">
-                <span className="text-sm font-semibold text-[#1c1c1c] flex items-center gap-1.5 font-sans">
-                  <Command className="w-3.5 h-3.5 text-[#1c1c1c]" /> Quick Command Palette
+              <div className="flex items-center justify-between pb-4 border-b border-hairline mb-6">
+                <span className="text-sm font-semibold text-ink flex items-center gap-1.5 font-sans">
+                  <Command className="w-3.5 h-3.5 text-ink" /> Quick Command Palette
                 </span>
-                <span className="text-sm text-[#1c1c1c]/60 font-medium font-sans">Interactable</span>
+                <span className="text-sm text-ink-muted font-medium font-sans">Interactable</span>
               </div>
 
               {/* Clickable mock search bar */}
               <div 
                 onClick={triggerInputSearch}
-                className="w-full flex items-center justify-between bg-[#f7f4ed] border border-[#eceae4] p-3 rounded-lg hover:border-[#1c1c1c]/40 transition-all cursor-pointer shadow-inner"
+                className="w-full flex items-center justify-between bg-[#f7f4ed] dark:bg-surface-2 border border-hairline p-3 rounded-lg hover:border-hairline-strong transition-all cursor-pointer shadow-inner"
               >
-                <span className="text-sm text-[#1c1c1c]/80 flex items-center gap-2 font-sans"><Search className="w-4 h-4 text-[#1c1c1c]" /> Search commands or workflows...</span>
-                <kbd className="text-sm font-sans bg-[#f2eee5] border border-[#eceae4] px-1.5 py-0.5 rounded text-[#1c1c1c] font-bold">K</kbd>
+                <span className="text-sm text-ink-secondary flex items-center gap-2 font-sans"><Search className="w-4 h-4 text-ink" /> Search commands or workflows...</span>
+                <kbd className="text-sm font-sans bg-surface-3 border border-hairline px-1.5 py-0.5 rounded text-ink font-bold">K</kbd>
               </div>
 
               <div className="space-y-2 mt-4">
                 <div 
                   onClick={() => setView("inbox", "Opened Inbox", "I")}
-                  className="p-2.5 rounded-md hover:bg-[#fafafa] cursor-pointer flex items-center justify-between text-sm text-[#1c1c1c] transition-all border border-transparent hover:border-[#eceae4]"
+                  className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Mail className="w-3.5 h-3.5 text-[#1c1c1c]" /> Switch to Inbox</span>
-                  <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">Press I</span>
+                  <span className="flex items-center gap-2 font-sans"><Mail className="w-3.5 h-3.5 text-ink" /> Switch to Inbox</span>
+                  <span className="text-sm text-ink-muted font-sans font-medium">Press I</span>
                 </div>
                 <div 
                   onClick={() => setView("calendar", "Opened Calendar", "C")}
-                  className="p-2.5 rounded-md hover:bg-[#fafafa] cursor-pointer flex items-center justify-between text-sm text-[#1c1c1c] transition-all border border-transparent hover:border-[#eceae4]"
+                  className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Calendar className="w-3.5 h-3.5 text-[#1c1c1c]" /> Switch to Calendar</span>
-                  <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">Press C</span>
+                  <span className="flex items-center gap-2 font-sans"><Calendar className="w-3.5 h-3.5 text-ink" /> Switch to Calendar</span>
+                  <span className="text-sm text-ink-muted font-sans font-medium">Press C</span>
                 </div>
                 <div 
                   onClick={() => setView("ai", "Opened AI Agent", "A")}
-                  className="p-2.5 rounded-md hover:bg-[#fafafa] cursor-pointer flex items-center justify-between text-sm text-[#1c1c1c] transition-all border border-transparent hover:border-[#eceae4]"
+                  className="p-2.5 rounded-md hover:bg-surface-2 cursor-pointer flex items-center justify-between text-sm text-ink transition-all border border-transparent hover:border-hairline"
                 >
-                  <span className="flex items-center gap-2 font-sans"><Bot className="w-3.5 h-3.5 text-[#1c1c1c]" /> Switch to AI Agent</span>
-                  <span className="text-sm text-[#1c1c1c]/50 font-sans font-medium">Press A</span>
+                  <span className="flex items-center gap-2 font-sans"><Bot className="w-3.5 h-3.5 text-ink" /> Switch to AI Agent</span>
+                  <span className="text-sm text-ink-muted font-sans font-medium">Press A</span>
                 </div>
               </div>
             </div>
 
-            <div className="text-sm text-[#1c1c1c]/60 mt-4 border-t border-[#eceae4] pt-3 flex items-center gap-2 font-sans">
-              <Bot className="w-3.5 h-3.5 text-[#1c1c1c]" />
+            <div className="text-sm text-ink-muted mt-4 border-t border-hairline pt-3 flex items-center gap-2 font-sans">
+              <Bot className="w-3.5 h-3.5 text-ink" />
               <span>Press those keys anywhere on this page to test live shortcuts.</span>
             </div>
           </div>
 
           {/* Right Column: Speed details (6 Columns) */}
           <div className="space-y-6 text-left">
-            <h3 className="heading-2 text-[#1c1c1c] font-semibold tracking-[-0.02em]">Navigation at home row speeds</h3>
-            <p className="body-sm text-[#1c1c1c]/80 leading-relaxed font-sans">
+            <h3 className="heading-2 text-ink font-semibold tracking-[-0.02em]">Navigation at home row speeds</h3>
+            <p className="body-sm text-ink-secondary leading-relaxed font-sans">
               Zero visual distractions, zero loading states. Syncar is built with keyboard triggers to let you traverse email replies, calendar coordinate bookings, search indices, and integrations with minimal resistance.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl border border-[#eceae4] bg-white shadow-sm">
-                <span className="text-sm font-semibold text-[#1c1c1c] block mb-1 font-sans">Sub-100ms Ingest</span>
-                <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">Cached index renders state changes offline instantly, saving changes to PostgreSQL in the background.</p>
+              <div className="p-4 rounded-xl border border-hairline bg-surface-1 shadow-sm">
+                <span className="text-sm font-semibold text-ink block mb-1 font-sans">Sub-100ms Ingest</span>
+                <p className="text-sm text-ink-secondary leading-relaxed font-sans">Cached index renders state changes offline instantly, saving changes to PostgreSQL in the background.</p>
               </div>
 
-              <div className="p-4 rounded-xl border border-[#eceae4] bg-white shadow-sm">
-                <span className="text-sm font-semibold text-[#1c1c1c] block mb-1 font-sans">Home Row Shortcuts</span>
-                <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">Archive, delete, draft, and query search structures with fast key triggers built natively.</p>
+              <div className="p-4 rounded-xl border border-hairline bg-surface-1 shadow-sm">
+                <span className="text-sm font-semibold text-ink block mb-1 font-sans">Home Row Shortcuts</span>
+                <p className="text-sm text-ink-secondary leading-relaxed font-sans">Archive, delete, draft, and query search structures with fast key triggers built natively.</p>
               </div>
             </div>
           </div>
@@ -1708,12 +1708,12 @@ function SpeedLayer({
  */
 function FutureOfWork() {
   return (
-    <section className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>System architecture</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">An operating system for work</h2>
-          <p className="body-md text-[#1c1c1c]/80 max-w-xl mx-auto mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">An operating system for work</h2>
+          <p className="body-md text-ink-secondary max-w-xl mx-auto mt-3 font-sans">
             An underlying architecture compiled for local speed, unified data consistency, and advanced LLM tool executions.
           </p>
         </div>
@@ -1721,39 +1721,39 @@ function FutureOfWork() {
         {/* Bento Grid Architecture */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           {/* Box 1 */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
             <div>
-              <div className="w-8 h-8 rounded border border-[#eceae4] bg-[#fafafa] flex items-center justify-center mb-4">
-                <Database className="w-4 h-4 text-[#1c1c1c]" />
+              <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
+                <Database className="w-4 h-4 text-ink" />
               </div>
-              <h3 className="text-base font-semibold text-[#1c1c1c] mb-2">Local-First Cache Index</h3>
-              <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">
+              <h3 className="text-base font-semibold text-ink mb-2">Local-First Cache Index</h3>
+              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
                 Synchronized PostgreSQL database replicating critical Gmail message headers and Google Calendar schedules. Queries retrieve instantly without direct API hops.
               </p>
             </div>
           </div>
 
           {/* Box 2 */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
             <div>
-              <div className="w-8 h-8 rounded border border-[#eceae4] bg-[#fafafa] flex items-center justify-center mb-4">
-                <Globe className="w-4 h-4 text-[#1c1c1c]" />
+              <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
+                <Globe className="w-4 h-4 text-ink" />
               </div>
-              <h3 className="text-base font-semibold text-[#1c1c1c] mb-2">Corsair Sync Webhooks</h3>
-              <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">
+              <h3 className="text-base font-semibold text-ink mb-2">Corsair Sync Webhooks</h3>
+              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
                 Webhook streams coordinate and sync remote alterations in background workers, keeping local datasets always aligned and resolving conflicts in real-time.
               </p>
             </div>
           </div>
 
           {/* Box 3 */}
-          <div className="bg-white border border-[#eceae4] rounded-xl p-6 flex flex-col justify-between shadow-sm">
+          <div className="bg-surface-1 border border-hairline rounded-xl p-6 flex flex-col justify-between shadow-sm">
             <div>
-              <div className="w-8 h-8 rounded border border-[#eceae4] bg-[#fafafa] flex items-center justify-center mb-4">
-                <Search className="w-4 h-4 text-[#1c1c1c]" />
+              <div className="w-8 h-8 rounded border border-hairline bg-surface-2 flex items-center justify-center mb-4">
+                <Search className="w-4 h-4 text-ink" />
               </div>
-              <h3 className="text-base font-semibold text-[#1c1c1c] mb-2">pgvector Semantic Search</h3>
-              <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">
+              <h3 className="text-base font-semibold text-ink mb-2">pgvector Semantic Search</h3>
+              <p className="text-sm text-ink-secondary leading-relaxed font-sans">
                 Vector embeddings computed using Google's text-embedding-004 allows users to perform semantic search, matching user intents rather than simple keywords.
               </p>
             </div>
@@ -1769,12 +1769,12 @@ function FutureOfWork() {
  */
 function OnboardingSection() {
   return (
-    <section className="px-6 py-24 border-b border-[#eceae4] bg-transparent">
+    <section className="px-6 py-24 border-b border-hairline bg-transparent">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <SectionEyebrow>Guided Setup</SectionEyebrow>
-          <h2 className="heading-1 mt-2 text-[#1c1c1c] font-semibold tracking-[-0.03em]">Connect in 3 minutes</h2>
-          <p className="body-md text-[#1c1c1c]/80 mt-3 font-sans">
+          <h2 className="heading-1 mt-2 text-ink font-semibold tracking-[-0.03em]">Connect in 3 minutes</h2>
+          <p className="body-md text-ink-secondary mt-3 font-sans">
             Secure, sandboxed local environment initialized immediately upon sign up.
           </p>
         </div>
@@ -1783,16 +1783,16 @@ function OnboardingSection() {
           {ONBOARDING_STEPS.map((step, idx) => (
             <div
               key={step.step}
-              className="flex items-start gap-4 p-5 rounded-xl border border-[#eceae4] bg-white shadow-sm"
+              className="flex items-start gap-4 p-5 rounded-xl border border-hairline bg-surface-1 shadow-sm"
             >
-              <span className="text-lg font-bold tabular-nums text-[#1c1c1c]/60 w-8 font-sans">
+              <span className="text-lg font-bold tabular-nums text-ink-muted w-8 font-sans">
                 {step.step}
               </span>
               <div className="flex-1 text-left">
-                <h3 className="text-base font-semibold mb-1 text-[#1c1c1c] font-sans">{step.title}</h3>
-                <p className="text-sm text-[#1c1c1c]/80 leading-relaxed font-sans">{step.desc}</p>
+                <h3 className="text-base font-semibold mb-1 text-ink font-sans">{step.title}</h3>
+                <p className="text-sm text-ink-secondary leading-relaxed font-sans">{step.desc}</p>
               </div>
-              <CheckCircle2 className="w-4 h-4 text-[#1c1c1c] flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-ink flex-shrink-0 mt-0.5" />
             </div>
           ))}
         </div>
@@ -1808,12 +1808,12 @@ function ActionCenterSection() {
   return (
     <section className="px-6 py-24 bg-transparent">
       <div 
-        className="max-w-2xl mx-auto text-center p-12 rounded-xl border border-[#eceae4] bg-white w-full shadow-sm"
+        className="max-w-2xl mx-auto text-center p-12 rounded-xl border border-hairline bg-surface-1 w-full shadow-sm"
       >
         <div className="flex flex-col items-center gap-6 mb-8 w-full">
           <SectionEyebrow>Get Started</SectionEyebrow>
-          <h2 className="display-2 text-[#1c1c1c] text-balance tracking-[-0.04em] font-semibold" style={{ maxWidth: "38rem" }}>Reclaim your inbox attention</h2>
-          <p className="body-md text-[#1c1c1c]/80 text-balance font-sans" style={{ maxWidth: "32rem" }}>
+          <h2 className="display-2 text-ink text-balance tracking-[-0.04em] font-semibold" style={{ maxWidth: "38rem" }}>Reclaim your inbox attention</h2>
+          <p className="body-md text-ink-secondary text-balance font-sans" style={{ maxWidth: "32rem" }}>
             Experience local inbox execution speed. Join the beta and coordinate workflows with natural AI commands.
           </p>
         </div>
