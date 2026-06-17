@@ -84,12 +84,9 @@ function OnboardingContent() {
         body: JSON.stringify({ plugin }),
       });
       if (res.ok) {
-        setStatus((prev) => {
-          if (!prev) return null;
-          return {
-            ...prev,
-            [plugin]: { connected: false },
-          };
+        setStatus({
+          gmail: { connected: false },
+          googlecalendar: { connected: false },
         });
       } else {
         const data = await res.json();
@@ -129,7 +126,7 @@ function OnboardingContent() {
             Connect Google Workspace
           </div>
           <p className="text-sm text-zinc-400 max-w-sm mx-auto">
-            Syncar runs on a zero-latency database cache. Connect your Gmail and Google Calendar to start.
+            Syncar runs on a zero-latency database cache. Connect your Google account to start.
           </p>
         </div>
 
@@ -150,22 +147,22 @@ function OnboardingContent() {
 
         {/* Cards Wrapper */}
         <div className="space-y-4 mb-8">
-          {/* Gmail Connection Card */}
+          {/* Google Workspace Connection Card */}
           <div
             className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 flex items-center justify-between gap-4 transition-all hover:border-zinc-700"
           >
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-zinc-800/80 flex items-center justify-center border border-zinc-700">
-                <Mail className="w-5 h-5 text-emerald-400" />
+                <Sparkles className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-sm text-white">Gmail Integration</h3>
-                <p className="text-xs text-zinc-400">Sync, read, and write emails with AI support</p>
+                <h3 className="font-semibold text-sm text-white">Google Workspace</h3>
+                <p className="text-xs text-zinc-400">Sync Gmail and Google Calendar with AI outcomes</p>
               </div>
             </div>
 
             <div>
-              {status?.gmail.connected ? (
+              {allConnected ? (
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 flex items-center gap-1">
                     <Check className="w-3.5 h-3.5" /> Connected
@@ -183,46 +180,7 @@ function OnboardingContent() {
                   disabled={connectingPlugin !== null}
                   className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white transition-all cursor-pointer shadow-md"
                 >
-                  {connectingPlugin === "gmail" ? "Connecting..." : "Connect"}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Calendar Connection Card */}
-          <div
-            className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 flex items-center justify-between gap-4 transition-all hover:border-zinc-700"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-zinc-800/80 flex items-center justify-center border border-zinc-700">
-                <Calendar className="w-5 h-5 text-emerald-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-sm text-white">Google Calendar</h3>
-                <p className="text-xs text-zinc-400">Sync coordinates and manage schedules</p>
-              </div>
-            </div>
-
-            <div>
-              {status?.googlecalendar.connected ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" /> Connected
-                  </span>
-                  <button
-                    onClick={() => handleDisconnect("googlecalendar")}
-                    className="text-xs text-zinc-400 hover:text-red-400 transition-colors"
-                  >
-                    Disconnect
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => handleConnect("googlecalendar")}
-                  disabled={connectingPlugin !== null}
-                  className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white transition-all cursor-pointer shadow-md"
-                >
-                  {connectingPlugin === "googlecalendar" ? "Connecting..." : "Connect"}
+                  {connectingPlugin !== null ? "Connecting..." : "Connect"}
                 </button>
               )}
             </div>
