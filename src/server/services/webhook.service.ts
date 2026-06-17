@@ -69,7 +69,7 @@ export class WebhookService {
 
           // Cast is required because withTenant() returns a generic CorsairInstance, 
           // but we need the specific plugin typings (gmail, googlecalendar) configured on the main corsair instance.
-          const tenantCorsair = corsair.withTenant(userId) as typeof corsair;
+          const tenantCorsair = corsair.withTenant(userId) as any;
 
           // Fetch message from Gmail API using Corsair
           const fullMsg = await tenantCorsair.gmail.api.messages.get({
@@ -86,6 +86,15 @@ export class WebhookService {
           break;
         }
 
+        case "gmail.messageDeleted": {
+          const messageId = payload.messageId || payload.id;
+          if (!messageId) {
+            throw new Error("Missing messageId/id in Gmail webhook payload");
+          }
+          await this.emailRepository.delete(messageId, userId);
+          break;
+        }
+
         // --- Google Calendar Webhooks ---
         case "googlecalendar.eventChanged":
         case "googlecalendar.eventCreated": {
@@ -95,7 +104,7 @@ export class WebhookService {
             throw new Error("Missing eventId/id in Calendar webhook payload");
           }
 
-          const tenantCorsair = corsair.withTenant(userId) as typeof corsair;
+          const tenantCorsair = corsair.withTenant(userId) as any;
 
           // Fetch event details
           const fullEvent = await tenantCorsair.googlecalendar.api.events.get({
