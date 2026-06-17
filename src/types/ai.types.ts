@@ -16,6 +16,7 @@ export interface ChatMessage {
   conversationId: string;
   role: ChatRole;
   content: string;
+  status?: "pending" | "completed" | "failed" | "cancelled";
   toolCalls?: ToolCall[];
   toolResults?: ToolResult[];
   createdAt: Date;
@@ -119,8 +120,8 @@ export interface AIModelConfig {
 
 export const GEMINI_MODELS = {
   FAST: "gemini-3.1-flash-lite",
-  STANDARD: "gemini-3.5-flash",
-  HEAVY: "gemma-4-31b",
+  STANDARD: "gemini-3.1-flash-lite",
+  HEAVY: "gemma-4-31b-it",
 } as const;
 
 export type GeminiModel = (typeof GEMINI_MODELS)[keyof typeof GEMINI_MODELS];

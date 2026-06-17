@@ -3,10 +3,11 @@ import { ValidationError, NotFoundError } from "@/lib/errors";
 import { Result, ok, err } from "@/lib/result";
 import { AIConversationRepository } from "@/server/repositories/ai-conversation.repository";
 import { corsair } from "@/lib/corsair";
-import { genAI } from "@/lib/gemini";
+import { genAI, executeGeminiWithRetry } from "@/lib/gemini";
 import { buildCorsairToolDefs } from "@corsair-dev/mcp";
 import { z } from "zod";
 import type { ChatOutput } from "@/types";
+import { SchemaType } from "@google/generative-ai";
 
 /**
  * Helper to determine if a Zod schema is optional.
@@ -80,12 +81,12 @@ export class ChatUseCase {
         const required: string[] = [];
 
         for (const [key, zodVal] of Object.entries(def.shape)) {
-          const isOptional = isZodSchemaOptional(zodVal);
+          const isOptional = isZodSchemaOptional(zodVal as any);
           if (!isOptional) {
             required.push(key);
           }
 
-          let type = "STRING";
+          let type: SchemaType = SchemaType.STRING;
           let description = (zodVal as any).description || "";
           let enumVals: string[] | undefined = undefined;
 
@@ -94,17 +95,22 @@ export class ChatUseCase {
             currentVal = currentVal._def.innerType || currentVal._def.schema;
           }
 
-          if (currentVal instanceof z.ZodEnum) {
-            type = "STRING";
-            enumVals = currentVal._def.values;
-          } else if (currentVal instanceof z.ZodNumber) {
-            type = "NUMBER";
-          } else if (currentVal instanceof z.ZodBoolean) {
-            type = "BOOLEAN";
-          } else if (currentVal instanceof z.ZodArray) {
-            type = "ARRAY";
-          } else if (currentVal instanceof z.ZodObject || currentVal instanceof z.ZodRecord) {
-            type = "OBJECT";
+          if (currentVal instanceof z.ZodEnum || currentVal.constructor.name === "ZodEnum") {
+            type = SchemaType.STRING;
+            enumVals = (currentVal as any)._def.values;
+          } else if (currentVal instanceof z.ZodNumber || currentVal.constructor.name === "ZodNumber") {
+            type = SchemaType.NUMBER;
+          } else if (currentVal instanceof z.ZodBoolean || currentVal.constructor.name === "ZodBoolean") {
+            type = SchemaType.BOOLEAN;
+          } else if (currentVal instanceof z.ZodArray || currentVal.constructor.name === "ZodArray") {
+            type = SchemaType.ARRAY;
+          } else if (
+            currentVal instanceof z.ZodObject ||
+            currentVal.constructor.name === "ZodObject" ||
+            currentVal instanceof z.ZodRecord ||
+            currentVal.constructor.name === "ZodRecord"
+          ) {
+            type = SchemaType.OBJECT;
           }
 
           properties[key] = {
@@ -118,7 +124,7 @@ export class ChatUseCase {
           name: def.name,
           description: def.description,
           parameters: {
-            type: "OBJECT",
+            type: SchemaType.OBJECT,
             properties,
             required: required.length > 0 ? required : undefined,
           },
@@ -127,7 +133,7 @@ export class ChatUseCase {
 
       // 5. Initialize Gemini Agent with Tools
       const model = genAI.getGenerativeModel({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.1-flash-lite",
         tools: [{ functionDeclarations }],
         systemInstruction: `
 You are Syncar's intelligent AI email and calendar companion.
@@ -149,12 +155,12 @@ Always return friendly, markdown-formatted professional answers summarizing your
         history: historyParts,
       });
 
-      let response = await chat.sendMessage(message);
+      let response = await executeGeminiWithRetry(() => chat.sendMessage(message));
       let functionCalls = response.response.functionCalls();
       const toolsUsed: string[] = [];
 
       while (functionCalls && functionCalls.length > 0) {
-        const functionResponses = [];
+        const functionResponses: any[] = [];
 
         for (const call of functionCalls) {
           toolsUsed.push(call.name);
@@ -189,7 +195,7 @@ Always return friendly, markdown-formatted professional answers summarizing your
           }
         }
 
-        response = await chat.sendMessage(functionResponses);
+        response = await executeGeminiWithRetry(() => chat.sendMessage(functionResponses));
         functionCalls = response.response.functionCalls();
       }
 

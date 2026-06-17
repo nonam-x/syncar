@@ -1,7 +1,27 @@
-import { geminiModel, geminiFastModel, geminiEmbeddingModel } from "@/lib/gemini";
+import { geminiModel, geminiFastModel, geminiEmbeddingModel, executeGeminiWithRetry } from "@/lib/gemini";
 import type { EmailPriority, ChatRole } from "@/types";
+import { SchemaType } from "@google/generative-ai";
 
 export class AIService {
+  // Embedding cache to deduplicate duplicate vector generation requests
+  private embeddingCache = new Map<string, number[]>();
+  private readonly maxCacheSize = 200;
+
+  // Background task rate limiter state
+  private lastRequestTime = 0;
+  private readonly minInterval = 1000; // Enforce minimum 1 second delay between background queries
+
+  private async throttleRequest() {
+    const now = Date.now();
+    const elapsed = now - this.lastRequestTime;
+    if (elapsed < this.minInterval) {
+      const waitTime = this.minInterval - elapsed;
+      this.lastRequestTime = now + waitTime;
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    } else {
+      this.lastRequestTime = now;
+    }
+  }
   /**
    * Generate 768-dimensional text embedding using text-embedding-004.
    */
@@ -12,23 +32,42 @@ export class AIService {
         return new Array(768).fill(0);
       }
 
-      const result = await geminiEmbeddingModel.embedContent({
-        content: { parts: [{ text: cleanedText }] },
-        outputDimensionality: 768,
-      } as any);
+      // Check cache first
+      const cached = this.embeddingCache.get(cleanedText);
+      if (cached) {
+        return cached;
+      }
+
+      // Rate limit background requests to protect quota limits
+      await this.throttleRequest();
+
+      const result = await executeGeminiWithRetry(() =>
+        geminiEmbeddingModel.embedContent({
+          content: { parts: [{ text: cleanedText }] },
+          outputDimensionality: 768,
+        } as any)
+      );
 
       if (!result.embedding || !result.embedding.values) {
         throw new Error("Failed to retrieve embedding values from Gemini API");
       }
 
       const values = result.embedding.values;
+      let finalValues = values;
       if (values.length > 768) {
-        return values.slice(0, 768);
+        finalValues = values.slice(0, 768);
       } else if (values.length < 768) {
-        return [...values, ...new Array(768 - values.length).fill(0)];
+        finalValues = [...values, ...new Array(768 - values.length).fill(0)];
       }
 
-      return values;
+      // Store in LRU cache
+      if (this.embeddingCache.size >= this.maxCacheSize) {
+        const firstKey = this.embeddingCache.keys().next().value;
+        if (firstKey !== undefined) this.embeddingCache.delete(firstKey);
+      }
+      this.embeddingCache.set(cleanedText, finalValues);
+
+      return finalValues;
     } catch (error) {
       console.error("Error generating embedding:", error);
       // Return zero-vector fallback so database inserts don't fail
@@ -69,32 +108,37 @@ Provide your output in strict JSON format matching the schema.
     `.trim();
 
     try {
-      const response = await geminiFastModel.generateContent({
-        contents: [
-          { role: "user", parts: [{ text: `${prompt}\n\nEmail Content:\n${emailContent}` }] },
-        ],
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              priority: {
-                type: "STRING",
-                enum: ["HIGH", "MEDIUM", "LOW"],
+      // Rate limit background requests to protect quota limits
+      await this.throttleRequest();
+
+      const response = await executeGeminiWithRetry(() =>
+        geminiFastModel.generateContent({
+          contents: [
+            { role: "user", parts: [{ text: `${prompt}\n\nEmail Content:\n${emailContent}` }] },
+          ],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: SchemaType.OBJECT,
+              properties: {
+                priority: {
+                  type: SchemaType.STRING,
+                  enum: ["HIGH", "MEDIUM", "LOW"],
+                },
+                confidence: {
+                  type: SchemaType.NUMBER,
+                  description: "Confidence score between 0.0 and 1.0",
+                },
+                reasoning: {
+                  type: SchemaType.STRING,
+                  description: "Brief reason why this priority was assigned",
+                },
               },
-              confidence: {
-                type: "NUMBER",
-                description: "Confidence score between 0.0 and 1.0",
-              },
-              reasoning: {
-                type: "STRING",
-                description: "Brief reason why this priority was assigned",
-              },
+              required: ["priority", "confidence", "reasoning"],
             },
-            required: ["priority", "confidence", "reasoning"],
           },
-        },
-      } as any);
+        } as any)
+      );
 
       const text = response.response.text();
       const parsed = JSON.parse(text);
@@ -137,25 +181,28 @@ Format the output in JSON as an object containing an array of suggestions.
     `.trim();
 
     try {
-      const response = await geminiModel.generateContent({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              suggestions: {
-                type: "ARRAY",
-                items: {
-                  type: "STRING",
+      // User-initiated action, does not throttle but uses backoff retry for quota errors
+      const response = await executeGeminiWithRetry(() =>
+        geminiModel.generateContent({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: SchemaType.OBJECT,
+              properties: {
+                suggestions: {
+                  type: SchemaType.ARRAY,
+                  items: {
+                    type: SchemaType.STRING,
+                  },
+                  description: "Three alternative email drafts",
                 },
-                description: "Three alternative email drafts",
               },
+              required: ["suggestions"],
             },
-            required: ["suggestions"],
           },
-        },
-      });
+        })
+      );
 
       const text = response.response.text();
       const parsed = JSON.parse(text);
