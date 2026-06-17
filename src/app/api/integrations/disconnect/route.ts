@@ -12,19 +12,19 @@ export async function POST(request: Request) {
       throw new ValidationError("Invalid or missing plugin. Must be 'gmail' or 'googlecalendar'.");
     }
 
-    // Run in transaction to clean up DB cache and connections
+    // Run in transaction to clean up DB cache and connections for BOTH integrations
     await prisma.$transaction(async (tx) => {
-      // Find the account to delete
-      const account = await tx.corsairAccount.findFirst({
+      // Find both accounts to delete
+      const accounts = await tx.corsairAccount.findMany({
         where: {
           tenantId: userId,
           integration: {
-            name: plugin,
+            name: { in: ["gmail", "googlecalendar"] },
           },
         },
       });
 
-      if (account) {
+      for (const account of accounts) {
         // Delete Corsair entities and events associated with this account
         await tx.corsairEntity.deleteMany({
           where: { accountId: account.id },
@@ -39,19 +39,16 @@ export async function POST(request: Request) {
         });
       }
 
-      // Delete cached domain data for this user
-      if (plugin === "gmail") {
-        await tx.email.deleteMany({
-          where: { userId },
-        });
-        await tx.emailDraft.deleteMany({
-          where: { userId },
-        });
-      } else if (plugin === "googlecalendar") {
-        await tx.calendarEvent.deleteMany({
-          where: { userId },
-        });
-      }
+      // Delete cached domain data for this user for both Gmail and Calendar
+      await tx.email.deleteMany({
+        where: { userId },
+      });
+      await tx.emailDraft.deleteMany({
+        where: { userId },
+      });
+      await tx.calendarEvent.deleteMany({
+        where: { userId },
+      });
     });
 
     return Response.json({ success: true });
@@ -59,3 +56,4 @@ export async function POST(request: Request) {
     return errorResponse(error);
   }
 }
+

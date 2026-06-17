@@ -20,6 +20,7 @@ export const ListEmailsSchema = z.object({
   maxResults: z.number().int().min(1).max(100).optional().default(20),
   pageToken: z.string().optional(),
   priority: z.enum(["HIGH", "MEDIUM", "LOW"]).optional(),
+  refresh: z.boolean().optional(),
 });
 
 export const SendEmailSchema = z.object({

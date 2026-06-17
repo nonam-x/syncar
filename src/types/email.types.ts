@@ -49,6 +49,8 @@ export interface Email {
   isRead: boolean;
   isStarred: boolean;
   priority: EmailPriority;
+  confidence?: number;
+  reasoning?: string;
   receivedAt: Date;
   attachments: EmailAttachment[];
 }

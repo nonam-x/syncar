@@ -21,7 +21,7 @@ export class ListEmailsUseCase {
       );
     }
 
-    const { labelIds, priority, maxResults } = validation.data;
+    const { labelIds, priority, maxResults, refresh } = validation.data;
 
     // 2. Call service layer wrapped in Result monad
     return fromPromise(
@@ -30,6 +30,7 @@ export class ListEmailsUseCase {
         labelIds,
         priority: priority as any,
         limit: maxResults,
+        forceRefresh: refresh,
       }),
       (error) => {
         console.error("ListEmailsUseCase failure:", error);

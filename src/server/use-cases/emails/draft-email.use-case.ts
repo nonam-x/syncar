@@ -25,6 +25,7 @@ export class DraftEmailUseCase {
 
     return fromPromise(
       this.emailService.createDraft(userId, {
+        userId,
         to: validation.data.to || [],
         cc: validation.data.cc,
         bcc: validation.data.bcc,

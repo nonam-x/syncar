@@ -196,6 +196,8 @@ export class EmailRepository extends BaseRepository {
       isRead: email.isRead,
       isStarred: email.isStarred,
       priority: email.priority as EmailPriority,
+      confidence: email.confidence ?? undefined,
+      reasoning: email.reasoning ?? undefined,
       receivedAt: email.receivedAt,
       attachments: email.attachments as any,
     };
