@@ -1,0 +1,207 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EmailPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model User {
+  id              String           @id // Clerk User ID (e.g. user_...)
+  email           String           @unique
+  firstName       String?          @map("first_name")
+  lastName        String?          @map("last_name")
+  imageUrl        String?          @map("image_url")
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  emails          Email[]
+  emailDrafts     EmailDraft[]
+  calendarEvents  CalendarEvent[]
+  aiConversations AIConversation[]
+
+  @@map("users")
+}
+
+model Email {
+  id          String                      @id // Gmail message ID
+  threadId    String                      @map("thread_id")
+  userId      String                      @map("user_id")
+  from        Json // { name?: string, email: string }
+  to          Json // Array of { name?: string, email: string }
+  cc          Json? // Array of { name?: string, email: string }
+  bcc         Json? // Array of { name?: string, email: string }
+  subject     String
+  snippet     String
+  body        String                      @db.Text
+  bodyHtml    String?                     @map("body_html") @db.Text
+  labelIds    String[]                    @map("label_ids")
+  isRead      Boolean                     @default(false) @map("is_read")
+  isStarred   Boolean                     @default(false) @map("is_starred")
+  priority    EmailPriority               @default(MEDIUM)
+  confidence  Float? // Priority classification confidence score (0.0 - 1.0)
+  reasoning   String?                     @db.Text // Priority classification reasoning
+  receivedAt  DateTime                    @map("received_at") @db.Timestamptz
+  attachments Json                        @default("[]") // Array of { id: string, filename: string, mimeType: string, size: number }
+  embedding   Unsupported("vector(768)")?
+  createdAt   DateTime                    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime                    @updatedAt @map("updated_at") @db.Timestamptz
+  user        User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([threadId])
+  @@index([priority])
+  @@index([receivedAt])
+  @@map("emails")
+}
+
+model EmailDraft {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  to             Json     @default("[]") // Array of { name?: string, email: string }
+  cc             Json? // Array of { name?: string, email: string }
+  bcc            Json? // Array of { name?: string, email: string }
+  subject        String   @default("")
+  body           String   @default("") @db.Text
+  bodyHtml       String?  @map("body_html") @db.Text
+  replyToEmailId String?  @map("reply_to_email_id")
+  corsairDraftId String?  @map("corsair_draft_id")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("email_drafts")
+}
+
+model CalendarEvent {
+  id               String                      @id // Google Calendar event ID
+  userId           String                      @map("user_id")
+  calendarId       String                      @map("calendar_id")
+  summary          String
+  description      String?                     @db.Text
+  location         String?
+  start            Json // { date?: string, dateTime?: string, timeZone?: string }
+  end              Json // { date?: string, dateTime?: string, timeZone?: string }
+  status           String // "confirmed" | "tentative" | "cancelled"
+  visibility       String? // "default" | "public" | "private" | "confidential"
+  attendees        Json                        @default("[]") // Array of CalendarAttendee
+  recurrence       String[]                    @default([])
+  recurringEventId String?                     @map("recurring_event_id")
+  htmlLink         String?                     @map("html_link")
+  hangoutLink      String?                     @map("hangout_link")
+  colorId          String?                     @map("color_id")
+  reminders        Json? // { useDefault: boolean, overrides?: EventReminder[] }
+  creator          Json? // { email: string, displayName?: string, self?: boolean }
+  organizer        Json? // { email: string, displayName?: string, self?: boolean }
+  embedding        Unsupported("vector(768)")?
+  createdAt        DateTime                    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime                    @updatedAt @map("updated_at") @db.Timestamptz
+  user             User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([calendarId])
+  @@index([status])
+  @@map("calendar_events")
+}
+
+model AIConversation {
+  id        String      @id @default(uuid())
+  userId    String      @map("user_id")
+  title     String?
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime    @updatedAt @map("updated_at") @db.Timestamptz
+  messages  AIMessage[]
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("ai_conversations")
+}
+
+model AIMessage {
+  id             String         @id @default(uuid())
+  conversationId String         @map("conversation_id")
+  role           String // "user" | "assistant" | "system"
+  content        String         @db.Text
+  toolCalls      Json?          @map("tool_calls")
+  toolResults    Json?          @map("tool_results")
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  conversation   AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@map("ai_messages")
+}
+
+model WebhookEvent {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  eventType String   @map("event_type")
+  payload   Json
+  status    String // "pending" | "processed" | "failed"
+  error     String?  @db.Text
+
+  @@map("webhook_events")
+}
+
+model CorsairIntegration {
+  id        String           @id
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  name      String
+  config    Json             @default("{}")
+  dek       String?
+  accounts  CorsairAccount[]
+
+  @@map("corsair_integrations")
+}
+
+model CorsairAccount {
+  id            String             @id
+  createdAt     DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt     DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+  tenantId      String             @map("tenant_id")
+  integrationId String             @map("integration_id")
+  config        Json               @default("{}")
+  dek           String?
+  integration   CorsairIntegration @relation(fields: [integrationId], references: [id])
+  entities      CorsairEntity[]
+  events        CorsairEvent[]
+
+  @@map("corsair_accounts")
+}
+
+model CorsairEntity {
+  id         String         @id
+  createdAt  DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  accountId  String         @map("account_id")
+  entityId   String         @map("entity_id")
+  entityType String         @map("entity_type")
+  version    String
+  data       Json           @default("{}")
+  account    CorsairAccount @relation(fields: [accountId], references: [id])
+
+  @@map("corsair_entities")
+}
+
+model CorsairEvent {
+  id        String         @id
+  createdAt DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  accountId String         @map("account_id")
+  eventType String         @map("event_type")
+  payload   Json           @default("{}")
+  status    String?
+  account   CorsairAccount @relation(fields: [accountId], references: [id])
+
+  @@map("corsair_events")
+}
