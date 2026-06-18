@@ -18,10 +18,10 @@ import type { Email } from "@/types";
 const NAV_ITEMS = [
     { id: "ai",       label: "Assistant", icon: Bot,      href: "/ai" },
   { id: "inbox",    label: "Inbox",        icon: Inbox,    href: "/inbox",    badge: true },
+  { id: "calendar", label: "Calendar",     icon: Calendar, href: "/calendar" },
+  { id: "sent",     label: "Sent",         icon: Send,     href: "/sent" },
   { id: "priority", label: "Priority",     icon: Star,     href: "/priority" },
   { id: "drafts",   label: "Drafts",       icon: FileText, href: "/drafts" },
-  { id: "sent",     label: "Sent",         icon: Send,     href: "/sent" },
-  { id: "calendar", label: "Calendar",     icon: Calendar, href: "/calendar" },
 
 ];
 
