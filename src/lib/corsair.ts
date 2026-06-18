@@ -84,23 +84,14 @@ export async function ensureCorsairInitialized(): Promise<void> {
   }
 
   try {
-    // Check and set gmail client credentials
-    const currentGmailClientId = await corsair.keys.gmail.get_client_id();
-    if (!currentGmailClientId) {
-      console.log("[Corsair] Initializing integration credentials for gmail plugin");
-      await corsair.keys.gmail.set_client_id(googleClientId);
-      await corsair.keys.gmail.set_client_secret(googleClientSecret);
-      await corsair.keys.gmail.set_redirect_url(googleRedirectUri);
-    }
+    // Always set credentials to ensure they match current env vars
+    await corsair.keys.gmail.set_client_id(googleClientId);
+    await corsair.keys.gmail.set_client_secret(googleClientSecret);
+    await corsair.keys.gmail.set_redirect_url(googleRedirectUri);
 
-    // Check and set googlecalendar client credentials
-    const currentCalendarClientId = await corsair.keys.googlecalendar.get_client_id();
-    if (!currentCalendarClientId) {
-      console.log("[Corsair] Initializing integration credentials for googlecalendar plugin");
-      await corsair.keys.googlecalendar.set_client_id(googleClientId);
-      await corsair.keys.googlecalendar.set_client_secret(googleClientSecret);
-      await corsair.keys.googlecalendar.set_redirect_url(googleRedirectUri);
-    }
+    await corsair.keys.googlecalendar.set_client_id(googleClientId);
+    await corsair.keys.googlecalendar.set_client_secret(googleClientSecret);
+    await corsair.keys.googlecalendar.set_redirect_url(googleRedirectUri);
   } catch (err) {
     console.error("[Corsair] Failed to initialize keys:", err);
   }
