@@ -1,4 +1,4 @@
-import { corsair } from "@/lib/corsair";
+import { corsair, ensureCorsairInitialized } from "@/lib/corsair";
 import { prisma } from "@/lib/prisma";
 import { EmailRepository } from "../repositories/email.repository";
 import { EmailDraftRepository } from "../repositories/email-draft.repository";
@@ -165,8 +165,13 @@ export class EmailService {
    * Build MIME structure and send a new email.
    */
   async sendEmail(params: SendEmailInput): Promise<Email> {
+    await ensureCorsairInitialized();
     const tenantCorsair = corsair.withTenant(params.userId) as any;
-    
+
+    if (!tenantCorsair.gmail) {
+      throw new Error("Gmail account not connected. Please connect your Gmail account in Settings.");
+    }
+
     // Refresh tokens and fetch connected profile email
     const profile = await tenantCorsair.gmail.api.users.getProfile({ userId: "me" });
     const fromEmail = profile.emailAddress;
@@ -212,7 +217,12 @@ export class EmailService {
    * Build MIME structure and create a new email draft.
    */
   async createDraft(userId: string, params: CreateDraftInput): Promise<EmailDraft> {
+    await ensureCorsairInitialized();
     const tenantCorsair = corsair.withTenant(userId) as any;
+
+    if (!tenantCorsair.gmail) {
+      throw new Error("Gmail account not connected. Please connect your Gmail account in Settings.");
+    }
 
     // Refresh tokens and fetch connected profile email
     const profile = await tenantCorsair.gmail.api.users.getProfile({ userId: "me" });
@@ -265,8 +275,13 @@ export class EmailService {
    * Sync the most recent messages from Gmail to the local cache and register a watch.
    */
   async syncFromCorsair(userId: string, maxResults: number = 30): Promise<void> {
+    await ensureCorsairInitialized();
     const tenantCorsair = corsair.withTenant(userId) as any;
     const accountId = await this.getCorsairAccountId(userId);
+
+    if (!tenantCorsair.gmail) {
+      throw new Error("Gmail account not connected. Please connect your Gmail account in Settings.");
+    }
 
     // 1. Get profile and save connected email address in CorsairAccount config for mapping lookup
     const profile = await tenantCorsair.gmail.api.users.getProfile({ userId: "me" });

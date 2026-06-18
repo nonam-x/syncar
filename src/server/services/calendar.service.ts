@@ -1,4 +1,4 @@
-import { corsair } from "@/lib/corsair";
+import { corsair, ensureCorsairInitialized } from "@/lib/corsair";
 import { prisma } from "@/lib/prisma";
 import { CalendarEventRepository } from "../repositories/calendar-event.repository";
 import type { CalendarEvent, ListEventsInput, CreateEventInput, UpdateEventInput, GetAvailabilityInput, CalendarAvailability } from "@/types";
@@ -55,6 +55,7 @@ export class CalendarService {
    * Create a new calendar event.
    */
   async createEvent(input: CreateEventInput): Promise<CalendarEvent> {
+    await ensureCorsairInitialized();
     const accountId = await this.getCorsairAccountId(input.userId);
     const calendarId = input.calendarId || "primary";
 
@@ -95,6 +96,7 @@ export class CalendarService {
    * Update an existing event.
    */
   async updateEvent(input: UpdateEventInput): Promise<CalendarEvent> {
+    await ensureCorsairInitialized();
     const accountId = await this.getCorsairAccountId(input.userId);
     const calendarId = input.calendarId || "primary";
 
@@ -137,6 +139,7 @@ export class CalendarService {
    * Delete an event.
    */
   async deleteEvent(userId: string, eventId: string, calendarId = "primary"): Promise<void> {
+    await ensureCorsairInitialized();
     const accountId = await this.getCorsairAccountId(userId);
 
     const tenantCorsair = corsair.withTenant(userId) as any;
@@ -161,6 +164,7 @@ export class CalendarService {
    * Fetch free/busy availability scheduling data.
    */
   async getAvailability(input: GetAvailabilityInput): Promise<CalendarAvailability[]> {
+    await ensureCorsairInitialized();
     const accountId = await this.getCorsairAccountId(input.userId);
     const calendarIds = input.calendarIds && input.calendarIds.length > 0 ? input.calendarIds : ["primary"];
 
@@ -192,6 +196,7 @@ export class CalendarService {
    * Sync events from Google Calendar via Corsair APIs.
    */
   async syncFromCorsair(userId: string, timeMin?: string, maxResults = 100): Promise<CalendarEvent[]> {
+    await ensureCorsairInitialized();
     const accountId = await this.getCorsairAccountId(userId);
     const calendarId = "primary";
 
