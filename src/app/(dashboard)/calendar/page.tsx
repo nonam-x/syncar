@@ -290,9 +290,10 @@ export default function CalendarPage() {
                   </p>
                   <button 
                     onClick={() => openNewEventModal(currentDate)}
-                    className="btn btn-primary"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
+                    style={{ background: "var(--accent)", color: "white" }}
                   >
-                    <Plus className="w-4 h-4 mr-1.5" />
+                    <Plus className="w-4 h-4" />
                     New Event
                   </button>
                 </div>
