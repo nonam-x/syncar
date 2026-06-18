@@ -119,12 +119,13 @@ export async function checkRateLimit(
       }
     });
   } catch (error) {
-    console.error("Rate limit verification failed (failing closed):", error);
+    // Fail open: if the rate limit check itself errors (e.g. DB connection issue),
+    // allow the request through rather than blocking all users.
+    console.error("Rate limit check failed, failing open:", error);
     return {
-      allowed: false,
+      allowed: true,
       current: 0,
       limit: 0,
-      error: "System rate limiting is currently experiencing connection issues. Please try again in a moment."
     };
   }
 }

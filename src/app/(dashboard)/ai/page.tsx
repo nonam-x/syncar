@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { TopNav } from "@/components/layout/TopNav";
 import { ChatMessage } from "@/components/ai/ChatMessage";
 import { ChatInput } from "@/components/ai/ChatInput";
-import { Plus, Bot } from "lucide-react";
+import { Plus } from "lucide-react";
 import { formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/Logo";
@@ -72,10 +72,11 @@ export default function AIPage() {
   useEffect(() => {
 
     const pendingMsg = activeConv?.messages.find(
-  (m) => m.status === "pending"
-);
-const conversationId = activeConv?.serverConvId;
-if (!pendingMsg || !conversationId) return;
+      (m) => m.status === "pending"
+    );
+    const conversationId = activeConv?.serverConvId;
+    if (!pendingMsg || !conversationId) return;
+    const messageId = pendingMsg.id;
 
     setIsLoading(true);
 
