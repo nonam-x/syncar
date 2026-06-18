@@ -9,5 +9,5 @@ export const maxDuration = 300;
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [processAICall, trackFailedAICalls, syncGmailWebhook],
-  streaming: "allow", // Safe configuration to support streaming updates
+
 });

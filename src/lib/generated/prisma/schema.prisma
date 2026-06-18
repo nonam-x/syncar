@@ -17,17 +17,19 @@ enum EmailPriority {
 }
 
 model User {
-  id              String           @id // Clerk User ID (e.g. user_...)
-  email           String           @unique
-  firstName       String?          @map("first_name")
-  lastName        String?          @map("last_name")
-  imageUrl        String?          @map("image_url")
-  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz
+  id              String            @id // Clerk User ID (e.g. user_...)
+  email           String            @unique
+  firstName       String?           @map("first_name")
+  lastName        String?           @map("last_name")
+  imageUrl        String?           @map("image_url")
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime          @updatedAt @map("updated_at") @db.Timestamptz
   emails          Email[]
   emailDrafts     EmailDraft[]
   calendarEvents  CalendarEvent[]
   aiConversations AIConversation[]
+  subscription    UserSubscription?
+  usage           UserUsage?
 
   @@map("users")
 }
@@ -132,6 +134,7 @@ model AIMessage {
   conversationId String         @map("conversation_id")
   role           String // "user" | "assistant" | "system"
   content        String         @db.Text
+  status         String         @default("completed") // "pending" | "completed" | "failed" | "cancelled"
   toolCalls      Json?          @map("tool_calls")
   toolResults    Json?          @map("tool_results")
   createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
@@ -204,4 +207,30 @@ model CorsairEvent {
   account   CorsairAccount @relation(fields: [accountId], references: [id])
 
   @@map("corsair_events")
+}
+
+model UserSubscription {
+  userId                 String   @id @map("user_id")
+  planName               String   @default("Starter") @map("plan_name")
+  status                 String   @default("active")
+  razorpaySubscriptionId String?  @map("razorpay_subscription_id")
+  price                  String   @default("0")
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt              DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_subscriptions")
+}
+
+model UserUsage {
+  userId             String   @id @map("user_id")
+  aiCallsCount       Int      @default(0) @map("ai_calls_count")
+  gmailCallsCount    Int      @default(0) @map("gmail_calls_count")
+  calendarCallsCount Int      @default(0) @map("calendar_calls_count")
+  lastResetDate      String   @map("last_reset_date")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_usage")
 }

@@ -206,6 +206,7 @@ exports.Prisma.AIMessageScalarFieldEnum = {
   conversationId: 'conversationId',
   role: 'role',
   content: 'content',
+  status: 'status',
   toolCalls: 'toolCalls',
   toolResults: 'toolResults',
   createdAt: 'createdAt'
@@ -260,6 +261,26 @@ exports.Prisma.CorsairEventScalarFieldEnum = {
   status: 'status'
 };
 
+exports.Prisma.UserSubscriptionScalarFieldEnum = {
+  userId: 'userId',
+  planName: 'planName',
+  status: 'status',
+  razorpaySubscriptionId: 'razorpaySubscriptionId',
+  price: 'price',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserUsageScalarFieldEnum = {
+  userId: 'userId',
+  aiCallsCount: 'aiCallsCount',
+  gmailCallsCount: 'gmailCallsCount',
+  calendarCallsCount: 'calendarCallsCount',
+  lastResetDate: 'lastResetDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -306,7 +327,9 @@ exports.Prisma.ModelName = {
   CorsairIntegration: 'CorsairIntegration',
   CorsairAccount: 'CorsairAccount',
   CorsairEntity: 'CorsairEntity',
-  CorsairEvent: 'CorsairEvent'
+  CorsairEvent: 'CorsairEvent',
+  UserSubscription: 'UserSubscription',
+  UserUsage: 'UserUsage'
 };
 
 /**

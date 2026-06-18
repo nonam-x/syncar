@@ -1,9 +1,69 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Bot, User, Zap, AlertCircle, XCircle, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Bot, User, Zap, AlertCircle, XCircle } from "lucide-react";
 import { cn, formatRelativeTime } from "@/lib/utils";
+
+const THINKING_STEPS = [
+  "Analyzing your request...",
+  "Searching your inbox...",
+  "Reading email threads...",
+  "Checking your calendar...",
+  "Processing workspace context...",
+  "Running AI tools...",
+  "Synthesizing results...",
+  "Preparing your response...",
+];
+
+function ThinkingIndicator() {
+  const [stepIndex, setStepIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setStepIndex((i) => (i + 1) % THINKING_STEPS.length);
+        setVisible(true);
+      }, 300);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-2 mb-2">
+      {/* Animated dots */}
+      <div className="flex items-center gap-0.5">
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className="w-1.5 h-1.5 rounded-full animate-bounce"
+            style={{
+              background: "var(--accent)",
+              animationDelay: `${i * 0.15}s`,
+            }}
+          />
+        ))}
+      </div>
+      <AnimatePresence mode="wait">
+        {visible && (
+          <motion.span
+            key={stepIndex}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="text-xs font-medium"
+            style={{ color: "var(--accent)" }}
+          >
+            {THINKING_STEPS[stepIndex]}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 // Sub-component to typewrite the message content smoothly on the fly
 function Typewriter({ text, speed = 4, onComplete }: { text: string; speed?: number; onComplete?: () => void }) {
@@ -126,12 +186,7 @@ export function ChatMessage({ message, onCancel, isLatest = false }: ChatMessage
             borderTopLeftRadius: isUser ? "16px" : "4px",
           }}
         >
-          {isPending && (
-            <div className="flex items-center gap-2 mb-1.5 text-xs font-semibold text-amber-500">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              <span>Syncar Assistant thinking...</span>
-            </div>
-          )}
+          {isPending && <ThinkingIndicator />}
 
           {isFailed && (
             <div className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-red-500">
