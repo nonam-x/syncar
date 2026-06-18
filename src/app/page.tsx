@@ -364,6 +364,14 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
                       Sign in
                     </MotionLink>
                     <MotionLink
+                      href="/demo/inbox"
+                      whileHover={{ y: -1 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="text-sm font-medium px-3 py-1.5 rounded border border-hairline text-ink-secondary hover:text-ink hover:border-hairline-strong transition-all duration-200 whitespace-nowrap"
+                    >
+                      Try Demo
+                    </MotionLink>
+                    <MotionLink
                       href="/sign-up"
                       whileHover={{ scale: 1.02, y: -1 }}
                       whileTap={{ scale: 0.98 }}
@@ -600,17 +608,17 @@ function HeroSection({ isLoaded, isSignedIn }: { isLoaded: boolean; isSignedIn: 
                   <ArrowRightIcon className="w-4 h-4" />
                 </motion.span>
               </MotionLink>
-              <motion.a 
-                href="#transform" 
+              <MotionLink
+                href="/demo/inbox"
                 whileHover="hover"
                 whileTap={{ scale: 0.98 }}
                 className="btn-lovable-outline px-6 py-3 text-sm font-medium rounded-md text-ink inline-flex items-center gap-2"
               >
-                See Comparative Flow
+                Try Demo
                 <motion.span variants={arrowVariants} className="flex items-center justify-center">
                   <ArrowRightIcon className="w-4 h-4" />
                 </motion.span>
-              </motion.a>
+              </MotionLink>
             </>
           )}
           {isLoaded && isSignedIn && (
