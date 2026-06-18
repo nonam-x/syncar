@@ -363,14 +363,7 @@ function NavigationBar({ isLoaded, isSignedIn, theme }: { isLoaded: boolean; isS
                     >
                       Sign in
                     </MotionLink>
-                    <MotionLink
-                      href="/demo/inbox"
-                      whileHover={{ y: -1 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="text-sm font-medium px-3 py-1.5 rounded border border-hairline text-ink-secondary hover:text-ink hover:border-hairline-strong transition-all duration-200 whitespace-nowrap"
-                    >
-                      Try Demo
-                    </MotionLink>
+    
                     <MotionLink
                       href="/sign-up"
                       whileHover={{ scale: 1.02, y: -1 }}
